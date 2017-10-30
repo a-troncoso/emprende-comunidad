@@ -1,0 +1,15 @@
+.root {
+  height: 100vh;
+  position: relative;
+}
+
+.mainContent {
+  position: absolute!important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.instruction {
+  margin-top: .5em;
+}

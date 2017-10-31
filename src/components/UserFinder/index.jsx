@@ -2,8 +2,6 @@ import React, {PropTypes} from 'react'
 import GoogleMapReact from 'google-map-react'
 import {Menu, MainButton, ChildButton} from 'react-mfb'
 import EcUserFinderInput from '../UserFinderInput'
-// import FaBeer from 'react-icons/fa/beer'
-import {FaBeer, MdChat, MdCheck} from 'react-icons/md';
 
 import style from './UserFinder.scss'
 
@@ -55,14 +53,13 @@ export default class UserFinder extends React.Component {
 
   render() {
     return (
-      <div className={style.root}>
-        <FaBeer />
+      <div className={style.root} >
         <EcUserFinderInput className={style.userFinderInput}></EcUserFinderInput>
 
         <Menu effect="zoomin" method="hover" position="br">
-          <MainButton iconResting="asdasd" iconActive="ion-close-round"/>
-          <ChildButton icon="ion-social-github" label="View on Github" href="https://github.com/nobitagit/react-material-floating-button/"/>
-          <ChildButton icon="ion-social-octocat" label="Follow me on Github" href="https://github.com/nobitagit"/>
+          <MainButton iconResting="ion-ios-eye" iconActive="ion-ios-eye-outline"/>
+          <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={() => this.props.history.push('/user-finder-map')}/>
+          <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('/places-list')} />
         </Menu>
 
         {this.state.showMap && <GoogleMapReact bootstrapURLKeys={{

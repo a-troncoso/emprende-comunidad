@@ -31,7 +31,6 @@ module.exports = {
       }
     }, {
       test: /\.(sass|scss)$/,
-      exclude: path.join(__dirname, 'mfb/src', 'mfb.scss'),
       use: ExtractTextPlugin.extract({
         fallback: 'style-loader',
         use: [{

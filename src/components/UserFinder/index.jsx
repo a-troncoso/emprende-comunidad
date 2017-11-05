@@ -12,7 +12,10 @@ export default class UserFinder extends React.Component {
     super(props)
 
     this.state = {
-      center: { lat: 0, lng: 0 },
+      center: {
+        lat: 0,
+        lng: 0
+      },
       zoom: 17,
       showMap: false
     }
@@ -44,22 +47,22 @@ export default class UserFinder extends React.Component {
           lng: success.coords.longitude
         },
         showMap: true
-      }, () => {
-        console.log(this.state)
       })
+    }).catch((error) => {
+      console.log(error)
     })
 
   }
 
   render() {
     return (
-      <div className={style.root} >
+      <div className={style.root}>
         <EcUserFinderInput className={style.userFinderInput}></EcUserFinderInput>
 
         <Menu effect="zoomin" method="hover" position="br">
           <MainButton iconResting="ion-ios-eye" iconActive="ion-ios-eye-outline"/>
           <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={() => this.props.history.push('/user-finder-map')}/>
-          <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('/places-list')} />
+          <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('/places-list')}/>
         </Menu>
 
         {this.state.showMap && <GoogleMapReact bootstrapURLKeys={{

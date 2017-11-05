@@ -3,6 +3,7 @@ import {Route} from 'react-router-dom'
 import EcSplash from '../Splash'
 import EcUserFinder from '../UserFinder'
 import EcPlacesList from '../PlacesList'
+import EcProductView from '../ProductView'
 
 export default class Main extends Component {
   constructor(props) {
@@ -15,6 +16,7 @@ export default class Main extends Component {
         <Route path="/" exact component={EcSplash}/>
         <Route path="/user-finder-map" component={EcUserFinder}/>
         <Route path="/places-list" component={EcPlacesList}/>
+        <Route path="/product-view/:productId" component={EcProductView}/>
       </main>
     )
   }

@@ -1,13 +1,16 @@
-import React, {PropTypes} from 'react'
+import React, {Component} from 'react'
 import GoogleMapReact from 'google-map-react'
 import {Menu, MainButton, ChildButton} from 'react-mfb'
 import EcUserFinderInput from '../UserFinderInput'
+import EcOwnMarker from '../OwnMarker'
+import EcMarker from '../Marker'
+import geolocationService from '../../services/geolocation'
 
 import style from './UserFinder.scss'
 
-const Position = ({text}) => <div>{text}</div>
+// const Position = ({text}) => <div>{text}</div>
 
-export default class UserFinder extends React.Component {
+export default class UserFinder extends Component {
   constructor(props) {
     super(props)
 
@@ -17,30 +20,20 @@ export default class UserFinder extends React.Component {
         lng: 0
       },
       zoom: 17,
-      showMap: false
+      showMap: false,
+      users: []
     }
   }
 
-  getLocation() {
-    const geolocation = navigator.geolocation
-
-    const location = new Promise((resolve, reject) => {
-      if (!geolocation) {
-        reject(new Error('Geolocation not Supported'))
-      }
-
-      geolocation.getCurrentPosition((position) => {
-        resolve(position)
-      }, () => {
-        reject(new Error('Permission denied'))
-      })
-    })
-
-    return location
+  componentWillMount() {
+    this.getGeolocation()
+    this.setState({
+      users: this.getUsers()
+    }, () => {console.log('from componentWillMount()', this.state)})
   }
 
-  componentWillMount() {
-    this.getLocation().then((success) => {
+  getGeolocation() {
+    geolocationService.getGeolocation().then((success) => {
       this.setState({
         center: {
           lat: success.coords.latitude,
@@ -51,10 +44,23 @@ export default class UserFinder extends React.Component {
     }).catch((error) => {
       console.log(error)
     })
+  }
 
+  getUsers() {
+    const center = {
+      lat: -33.4315604,
+      lng: -70.6855855
+    }
+    return [{
+      image: 'https://randomuser.me/api/portraits/thumb/men/51.jpg',
+      location: { lat: center.lat, lng: center.lng }
+    }]
   }
 
   render() {
+    const user = {
+      image: 'https://randomuser.me/api/portraits/thumb/men/51.jpg'
+    }
     return (
       <div className={style.root}>
         <EcUserFinderInput className={style.userFinderInput}></EcUserFinderInput>
@@ -69,16 +75,27 @@ export default class UserFinder extends React.Component {
           key: 'AIzaSyC0FT8GbyxW9iqYx65r0ibCUpY78sjrRhs',
           language: 'es'
         }} defaultCenter={this.state.center} defaultZoom={this.state.zoom}>
-          <Position lat={this.state.center.lat} lng={this.state.center.lng} text={'YO'}/>
-          <Position lat={-33.432865} lng={-70.683369} text={'*'}/>
+          <EcOwnMarker lat={this.state.center.lat} lng={this.state.center.lng}/>
+          {/*{this.state.users.map((user, key)=> {
+            <EcMarker
+              lat={user.location.lat}
+              lng={user.location.lng}
+              user={user}
+              key={key}/>
+          })}*/}
 
-          <Position lat={this.state.center.lat - 0.002} lng={this.state.center.lng - 0.0012} text={'*'}/>
-          <Position lat={this.state.center.lat - 0.00014} lng={this.state.center.lng - 0.0004} text={'*'}/>
-          <Position lat={this.state.center.lat - 0.00009} lng={this.state.center.lng - 0.005} text={'*'}/>
-          <Position lat={this.state.center.lat - 0.00012} lng={this.state.center.lng + 0.005} text={'*'}/>
-          <Position lat={this.state.center.lat + 0.00012} lng={this.state.center.lng + 0.005} text={'*'}/>
-          <Position lat={this.state.center.lat + 0.000012} lng={this.state.center.lng + 0.0005} text={'*'}/>
-          <Position lat={this.state.center.lat + 0.00008} lng={this.state.center.lng + 0.00012} text={'*'}/>
+          <EcMarker
+            lat={this.state.users[0].location.lat}
+            lng={this.state.users[0].location.lng}
+            user={this.state.users[0]}/>
+
+          {/*<EcMarker lat={this.state.center.lat - 0.002} lng={this.state.center.lng - 0.0012}/>
+          <EcMarker lat={this.state.center.lat - 0.00014} lng={this.state.center.lng - 0.0004}/>
+          <EcMarker lat={this.state.center.lat - 0.00009} lng={this.state.center.lng - 0.005}/>
+          <EcMarker lat={this.state.center.lat - 0.00012} lng={this.state.center.lng + 0.005}/>
+          <EcMarker lat={this.state.center.lat + 0.00012} lng={this.state.center.lng + 0.005}/>
+          <EcMarker lat={this.state.center.lat + 0.000012} lng={this.state.center.lng + 0.0005}/>
+          <EcMarker lat={this.state.center.lat + 0.00008} lng={this.state.center.lng + 0.00012}/>*/}
         </GoogleMapReact>}
       </div>
     )

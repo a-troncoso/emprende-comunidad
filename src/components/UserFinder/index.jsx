@@ -68,7 +68,7 @@ export default class UserFinder extends Component {
         <Menu effect="zoomin" method="hover" position="br">
           <MainButton iconResting="ion-ios-eye" iconActive="ion-ios-eye-outline"/>
           <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={() => this.props.history.push('/user-finder-map')}/>
-          <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('/places-list')}/>
+          <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('/users-list')}/>
         </Menu>
 
         {this.state.showMap && <GoogleMapReact bootstrapURLKeys={{

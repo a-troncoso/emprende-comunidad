@@ -1,15 +1,22 @@
 function getGeolocation() {
   const geolocation = navigator.geolocation
+  let watchId = null
 
   const location = new Promise((resolve, reject) => {
     if (!geolocation) {
-      reject(new Error('Geolocation not Supported'))
+      reject(new Error('Geolocation not supported'))
     }
 
-    geolocation.getCurrentPosition((position) => {
+    watchId = geolocation.watchPosition((position) => {
+      // console.log('watcheando...', position.coords)
       resolve(position)
+
     }, () => {
       reject(new Error('Permission denied'))
+    }, {
+      enableHighAccuracy: true,
+      maximumAge: 30000,
+      timeout: 27000
     })
   })
 

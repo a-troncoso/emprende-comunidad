@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {Menu, MainButton, ChildButton} from 'react-mfb'
 import {Image, Item, Segment} from 'semantic-ui-react'
 import StarRatingComponent from 'react-star-rating-component'
 
 export default class UsersList extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       users: [
@@ -93,8 +93,8 @@ export default class UsersList extends Component {
           <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('/places-list')}/>
         </Menu>
       </div>
-    );
+    )
   }
 }
 
-UsersList.propTypes = {};
+UsersList.propTypes = {}

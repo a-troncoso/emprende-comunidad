@@ -3,35 +3,72 @@ import {PropTypes} from 'prop-types'
 import classNames from 'classnames'
 import {Image} from 'semantic-ui-react'
 
-import style from './Marker.scss'
+import EcProductMarkers from '../ProductMarkers'
 
+import style from './Marker.scss'
 
 export default class Marker extends Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      showProductMarkers: false
+    }
+
     this.onClickMarker = this.onClickMarker.bind(this)
+    this.handleOutsideClick = this.handleOutsideClick.bind(this)
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    this.ismounted = true
+  }
+
+  componentWillUnmount() {
+    this.ismounted = false
+  }
 
   onClickMarker() {
-    console.log('marker clicked')
+
+    if (!this.state.showProductMarkers) {
+      // attach/remove event handler
+      document.addEventListener('click', this.handleOutsideClick, false)
+    } else {
+      document.removeEventListener('click', this.handleOutsideClick, false)
+    }
+
+    this.setState(prevState => ({
+      showProductMarkers: !prevState.showProductMarkers
+    }))
+  }
+
+  handleOutsideClick(e) {
+    // ignore clicks on the component itself
+    if (this.node && this.node.contains(e.target)) {
+      return
+    }
+
+    if (this.ismounted) {
+      this.onClickMarker()
+    }
   }
 
   render() {
     return (
-      <div>
-        <div className={[style.markerPin,style.markerBounce].join(' ')} onClick={this.onClickMarker}>
+      <div ref={node => {
+        this.node = node
+      }}>
+        <div className={style.markerPulse}></div>
+        {this.state.showProductMarkers && (
+          <EcProductMarkers products={this.props.user.products}></EcProductMarkers>
+        )}
+        <div className={[style.markerPin, style.markerBounce].join(' ')} onClick={this.onClickMarker}>
           <img src={this.props.user.image} className={style.markerImage}></img>
         </div>
-        <div className={style.markerPulse}></div>
       </div>
     )
   }
 }
 
 Marker.propTypes = {
-  text: PropTypes.string,
-  // user: PropTypes.object
+  user: PropTypes.object
 }

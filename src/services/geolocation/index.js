@@ -8,9 +8,7 @@ function getGeolocation() {
     }
 
     watchId = geolocation.watchPosition((position) => {
-      // console.log('watcheando...', position.coords)
       resolve(position)
-
     }, () => {
       reject(new Error('Permission denied'))
     }, {

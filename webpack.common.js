@@ -2,9 +2,10 @@ const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-// require('react-mfb/4mfb.css')
+const merge = require('webpack-merge')
+// const CleanWebpackPlugin = require('clean-webpack-plugin')
+
 module.exports = {
-  devtool: 'cheap-module-eval-source-map',
   resolve: {
     extensions: ['.js', '.jsx'],
     modules: [
@@ -45,9 +46,21 @@ module.exports = {
           loader: 'sass-loader'
         }]
       })
+    }, {
+      test: /\.(jpg|png|svg)$/,
+      loader: 'file-loader',
+      options: {
+        name: './images/[hash].[ext]',
+      },
     }]
   },
+  // resolve: {
+  //   alias: {
+  //     '@': path.resolve(__dirname, './src')
+  //   }
+  // },
   plugins: [
+    // new CleanWebpackPlugin(['build']),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new ExtractTextPlugin('style.css', {
@@ -58,13 +71,5 @@ module.exports = {
       template: path.join(__dirname, 'src', 'index.html'),
       filename: 'index.html'
     })
-  ],
-  devServer: {
-    host: '0.0.0.0',
-    hot: true,
-    port: 8080,
-    inline: true,
-    contentBase: path.join(__dirname, 'src'),
-    historyApiFallback: true
-  }
+  ]
 }

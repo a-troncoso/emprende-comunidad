@@ -5,6 +5,7 @@ import EcUserFinderInput from '../UserFinderInput'
 import EcOwnMarker from '../OwnMarker'
 import EcMarker from '../Marker'
 import geolocationService from '../../services/geolocation'
+import firebase from 'firebase'
 
 import style from './UserFinder.scss'
 
@@ -17,6 +18,10 @@ export default class UserFinder extends Component {
         lat: 0,
         lng: 0
       },
+      ownPosition: {
+        lat: 0,
+        lng: 0
+      },
       zoom: 17,
       showMap: false,
       users: []
@@ -24,11 +29,39 @@ export default class UserFinder extends Component {
   }
 
   componentWillMount() {
-    this.getGeolocation()
-    this.setState({users: this.getUsers()})
+    this.handleGetCenterMapPosition()
+    this.handleUserAdded()
   }
 
-  getGeolocation() {
+  handleUserAdded() {
+    // firebase.databse().ref() -> referencia a la base de datos
+    const messageRef = firebase.database().ref().child('users')
+    let users = []
+    // child_added -> evento q se ejecuta cada vez q se agrega algo a la bd
+    // snapshot -> captura de la bd en ese momento
+    // napshot.val() -> valor q contiene snapshot
+    messageRef.on('child_added', snapshot => {
+      users = users.concat(snapshot.val())
+      this.setState({users})
+    })
+  }
+
+  handleGetCenterMapPosition() {
+    geolocationService.getGeolocation().then(success => {
+      this.setState({
+        center: {
+          lat: success.coords.latitude,
+          lng: success.coords.longitude
+        }
+      })
+
+      this.handleGetCurrentPosition()
+    }).catch(error => {
+      throw error
+    })
+  }
+
+  handleGetCurrentPosition() {
     const geolocation = navigator.geolocation
     let watchId = null
 
@@ -36,77 +69,21 @@ export default class UserFinder extends Component {
       reject(new Error('Geolocation not supported'))
     }
 
-    watchId = geolocation.watchPosition((position) => {
-      console.log(position.coords)
+    watchId = geolocation.watchPosition(position => {
       this.setState({
-        center: {
+        ownPosition: {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         },
         showMap: true
       })
-
     }, () => {
-      reject(new Error('Permission denied'))
+      throw 'An error has ocurred with geolocation'
     }, {
       enableHighAccuracy: true,
       maximumAge: 30000,
       timeout: 27000
     })
-  }
-
-  getUsers() {
-    return [
-      {
-        image: 'https://randomuser.me/api/portraits/thumb/men/50.jpg',
-        location: {
-          lat: -33.4315604,
-          lng: -70.6855855
-        },
-        products: [
-          {
-            id: 1,
-            name: 'Güatitas',
-            image: 'https://2.bp.blogspot.com/-rtumTUYx4WA/T_WslaSRdyI/AAAAAAAAANM/Kt7_h9JDn5w/s1600/guatitas-a-la-jardinera.jpg',
-            rating: 5
-          }, {
-            id: 2,
-            name: 'Patas de chancho',
-            image: 'https://images.ssstatic.com/vendemos-a-todo-el-mundo-patas-de-pollo-gallina-y-cerdo-1537425n0-00000046.jpg',
-            rating: 4
-          }
-        ]
-      }, {
-        image: 'https://randomuser.me/api/portraits/thumb/men/51.jpg',
-        location: {
-          lat: -33.4305704,
-          lng: -70.6845955
-        },
-        products: [
-          {
-            id: 1,
-            name: 'Güatitas',
-            image: 'https://2.bp.blogspot.com/-rtumTUYx4WA/T_WslaSRdyI/AAAAAAAAANM/Kt7_h9JDn5w/s1600/guatitas-a-la-jardinera.jpg',
-            rating: 5
-          }, {
-            id: 2,
-            name: 'Patas de chancho',
-            image: 'https://images.ssstatic.com/vendemos-a-todo-el-mundo-patas-de-pollo-gallina-y-cerdo-1537425n0-00000046.jpg',
-            rating: 4
-          }, {
-            id: 3,
-            name: 'Queso de pata',
-            image: 'https://images.ssstatic.com/vendemos-a-todo-el-mundo-patas-de-pollo-gallina-y-cerdo-1537425n0-00000046.jpg',
-            rating: 2
-          }, {
-            id: 4,
-            name: 'Sopaipillas',
-            image: 'http://masmasa.cl/wp-content/uploads/2017/06/SOPAIPILLAS-COC.jpg',
-            rating: 5
-          }
-        ]
-      }
-    ]
   }
 
   render() {
@@ -127,9 +104,11 @@ export default class UserFinder extends Component {
           key: 'AIzaSyC0FT8GbyxW9iqYx65r0ibCUpY78sjrRhs',
           language: 'es'
         }} center={this.state.center} defaultZoom={this.state.zoom}>
-          <EcOwnMarker lat={this.state.center.lat} lng={this.state.center.lng}/>
+          <EcOwnMarker lat={this.state.ownPosition.lat} lng={this.state.ownPosition.lng}></EcOwnMarker>
           {this.state.users.map((user, key) => {
-            return (<EcMarker lat={user.location.lat} lng={user.location.lng} user={user} key={key}/>)
+            return (
+              <EcMarker lat={user.location.lat} lng={user.location.lng} user={user} key={key}></EcMarker>
+            )
           })}
         </GoogleMapReact>}
       </div>

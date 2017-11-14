@@ -2,52 +2,19 @@ import React, {Component} from 'react'
 import {Menu, MainButton, ChildButton} from 'react-mfb'
 import {Image, Item, Segment} from 'semantic-ui-react'
 import StarRatingComponent from 'react-star-rating-component'
+import firebase from 'firebase'
 
 export default class UsersList extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      users: [
-        {
-          id: 1,
-          products: [
-            {
-              id: 1,
-              name: 'Güatitas',
-              image: 'https://2.bp.blogspot.com/-rtumTUYx4WA/T_WslaSRdyI/AAAAAAAAANM/Kt7_h9JDn5w/s1600/guatitas-a-la-jardinera.jpg',
-              rating: 5
-            }, {
-              id: 2,
-              name: 'Patas de chancho',
-              image: 'https://images.ssstatic.com/vendemos-a-todo-el-mundo-patas-de-pollo-gallina-y-cerdo-1537425n0-00000046.jpg',
-              rating: 4
-            }, {
-              id: 3,
-              name: 'Queso de pata',
-              image: 'https://images.ssstatic.com/vendemos-a-todo-el-mundo-patas-de-pollo-gallina-y-cerdo-1537425n0-00000046.jpg',
-              rating: 2
-            }
-          ],
-          image: 'https://randomuser.me/api/portraits/med/women/84.jpg',
-          fullName: 'Stevie Feliciano',
-          rating: 3,
-          showProducts: false
-        }, {
-          id: 2,
-          products: [],
-          image: 'https://randomuser.me/api/portraits/med/women/83.jpg',
-          fullName: 'Veronika Ossi',
-          showProducts: false
-        }, {
-          id: 3,
-          products: [],
-          image: 'https://randomuser.me/api/portraits/med/women/82.jpg',
-          fullName: 'Jenny Hess',
-          showProducts: false
-        }
-      ]
+      users: []
     }
+  }
+
+  componentWillMount() {
+    this.handleUserAdded()
   }
 
   onShowProducts(userId) {
@@ -58,6 +25,17 @@ export default class UsersList extends Component {
     })
 
     this.setState({users})
+  }
+
+  handleUserAdded() {
+    const messageRef = firebase.database().ref().child('users')
+    let users = [], user = {}
+    messageRef.on('child_added', snapshot => {
+      user = snapshot.val()
+      user.showProducts = false
+      users = users.concat(user)
+      this.setState({users})
+    })
   }
 
   render() {

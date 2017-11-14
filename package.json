@@ -2,15 +2,17 @@
   "name": "emprende-comunidad",
   "version": "1.0.0",
   "description": "Emprende comunidad project v1",
+  "homepage": "https://github.com/a-troncoso/emprende-comunidad",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --colors",
-    "serve": "webpack-dev-server --content-base build/ --colors --progress --https",
-    "start": "yarn run build && yarn run serve"
+    "start": "webpack-dev-server --open --colors --progress --https --config webpack.dev.js",
+    "build": "webpack --colors --config webpack.prod.js"
   },
   "author": "Álvaro Troncoso",
   "license": "ISC",
   "dependencies": {
+    "clean-webpack-plugin": "^0.1.17",
+    "firebase": "^4.6.2",
     "google-map-react": "^0.25.0",
     "history": "^4.7.2",
     "mfb": "^0.12.0",
@@ -32,11 +34,14 @@
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.1",
+    "file-loader": "^1.1.5",
     "html-webpack-plugin": "^2.30.1",
     "node-sass": "^4.5.3",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.0",
+    "uglifyjs-webpack-plugin": "^1.0.1",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.3"
+    "webpack-dev-server": "^2.9.3",
+    "webpack-merge": "^4.1.1"
   }
 }

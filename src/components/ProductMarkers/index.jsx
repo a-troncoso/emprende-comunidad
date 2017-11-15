@@ -20,7 +20,8 @@ export default class ProductMarkers extends Component {
           return (
             <div className={style.product} key={key}>
               <Link to={{
-                pathname: `/product-view/${product.id}`
+                pathname: `/product-view`,
+                state: {product}
               }}>
 
                 <Image src={product.image} shape="circular"></Image>

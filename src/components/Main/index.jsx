@@ -18,7 +18,7 @@ export default class Main extends Component {
         <Route path="/" exact component={EcSplash}/>
         <Route path="/user-finder-map" exact component={EcUserFinder}/>
         <Route path="/users-list" exact component={EcUsersList}/>
-        <Route path="/product-view/:productId" exact component={EcProductView}/>
+        <Route path="/product-view" exact component={EcProductView}/>
         <Route path="/seller" exact component={EcSeller}/>
       </main>
     )

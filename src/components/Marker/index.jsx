@@ -28,7 +28,6 @@ export default class Marker extends Component {
   }
 
   onClickMarker() {
-
     if (!this.state.showProductMarkers) {
       // attach/remove event handler
       document.addEventListener('click', this.handleOutsideClick, false)
@@ -58,7 +57,7 @@ export default class Marker extends Component {
         this.node = node
       }}>
         <div className={style.markerPulse}></div>
-        {this.state.showProductMarkers && (
+        {this.state.showProductMarkers && this.props.user.products.length > 0 && (
           <EcProductMarkers products={this.props.user.products}></EcProductMarkers>
         )}
         <div className={[style.markerPin, style.markerBounce].join(' ')} onClick={this.onClickMarker}>

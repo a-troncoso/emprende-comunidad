@@ -41,6 +41,7 @@ export default class UserFinder extends Component {
     // snapshot -> captura de la bd en ese momento
     // napshot.val() -> valor q contiene snapshot
     messageRef.on('child_added', snapshot => {
+      console.info(`new user -> ${snapshot.val()}`)
       users = users.concat(snapshot.val())
       this.setState({users})
     })

@@ -30,7 +30,7 @@ export default class Seller extends Component {
         lat: coords.latitude,
         lng: coords.longitude
       },
-      products: []
+      products: 0
     }
 
     const usersRef = firebase.database().ref().child('users')

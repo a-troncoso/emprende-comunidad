@@ -17,11 +17,14 @@ export default class ProductView extends Component {
     super(props)
 
     this.state = {
-      product: {}
+      product: {},
+      user: {}
     }
   }
 
   componentWillMount() {
+    console.log('product:', this.props.location.state.product)
+    console.log('user:', this.props.location.state.user)
     const products = [
       {
         id: 1,
@@ -163,9 +166,9 @@ export default class ProductView extends Component {
       }
     ]
 
-    const productId = parseInt(this.props.match.params.productId)
-    const product = products.filter((product) => product.id === productId)[0]
-    this.setState({product})
+    // const productId = parseInt(this.props.match.params.productId)
+    const product = this.props.location.state.product
+    this.setState({product, user})
   }
 
   render() {
@@ -237,4 +240,6 @@ export default class ProductView extends Component {
   }
 }
 
-ProductView.propTypes = {}
+ProductView.propTypes = {
+  // product: PropTypes.object.isRequired
+}

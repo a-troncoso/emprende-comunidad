@@ -58,7 +58,7 @@ export default class Marker extends Component {
       }}>
         <div className={style.markerPulse}></div>
         {this.state.showProductMarkers && this.props.user.products.length > 0 && (
-          <EcProductMarkers products={this.props.user.products}></EcProductMarkers>
+          <EcProductMarkers products={this.props.user.products} user={this.props.user}></EcProductMarkers>
         )}
         <div className={[style.markerPin, style.markerBounce].join(' ')} onClick={this.onClickMarker}>
           <img src={this.props.user.image} className={style.markerImage}></img>

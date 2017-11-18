@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {BrowserRouter} from 'react-router-dom'
+import {BrowserRouter as Router} from 'react-router-dom'
 import firebase from 'firebase'
 
 import EcMain from '../Main'
@@ -22,9 +22,9 @@ export default class App extends Component {
 
   render() {
     return (
-      <BrowserRouter>
+      <Router>
         <EcMain></EcMain>
-      </BrowserRouter>
+      </Router>
     )
   }
 }

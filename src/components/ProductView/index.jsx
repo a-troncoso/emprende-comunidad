@@ -45,7 +45,7 @@ export default class ProductView extends Component {
 
             <Item.Content className={style.itemContent}>
               <Item.Header>{this.state.product.name}</Item.Header>
-              <Item.Meta className={style.itemMeta}>{this.state.user.name}</Item.Meta>
+              <Item.Meta className={style.itemMeta}>{this.state.user.fullName}</Item.Meta>
               <Item.Extra className={style.itemExtra}>{this.state.user.location.address}</Item.Extra>
               <Item.Description>{this.state.product.description}</Item.Description>
             </Item.Content>
@@ -70,7 +70,7 @@ export default class ProductView extends Component {
           {this.state.product.comments.length > 0 && this.state.product.comments.map((comment, key) => {
             return (
               <Comment key={key}>
-                <Comment.Avatar src={comment.user.avatarUrl}/>
+                <Comment.Avatar src={comment.user.avatarUrl} className={style.commentAvatar}/>
                 <Comment.Content>
                   <Comment.Author className={style.commentAuthor}>{comment.user.name}</Comment.Author>
                   <Comment.Metadata>{comment.publicationDate}

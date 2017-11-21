@@ -54,13 +54,7 @@ module.exports = {
       },
     }]
   },
-  // resolve: {
-  //   alias: {
-  //     '@': path.resolve(__dirname, './src')
-  //   }
-  // },
   plugins: [
-    // new CleanWebpackPlugin(['build']),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new ExtractTextPlugin('style.css', {

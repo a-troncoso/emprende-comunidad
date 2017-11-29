@@ -49,7 +49,7 @@ export default class UsersList extends Component {
                 return (
                   <Segment key={user.id}>
                     <Item.Image size='tiny' shape='circular' src={user.image} onClick={() => this.onShowProducts(user.id)}/>
-                    <span>{user.fullName}</span>
+                    <span>{user.name} {user.lastName}</span>
                     {user.showProducts && <Segment.Group>
                       {user.products.map((product) => {
                         return (

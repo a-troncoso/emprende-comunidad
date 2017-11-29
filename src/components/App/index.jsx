@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {BrowserRouter as Router} from 'react-router-dom'
 import firebase from 'firebase'
 
-import EcMain from '../Main'
+import EcMain from '@/components/Main'
 
 import style from './App.scss'
 

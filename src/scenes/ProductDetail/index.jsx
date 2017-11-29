@@ -9,10 +9,11 @@ import {
 } from 'semantic-ui-react'
 import StarRatingComponent from 'react-star-rating-component'
 import Slider from 'react-slick'
+import EcSidebarMenu from '@/components/SidebarMenu'
 
-import style from './ProductView.scss'
+import style from './ProductDetail.scss'
 
-export default class ProductView extends Component {
+export default class ProductDetail extends Component {
   constructor(props) {
     super(props)
 
@@ -23,17 +24,15 @@ export default class ProductView extends Component {
   }
 
   componentWillMount() {
-    // const productId = parseInt(this.props.match.params.productId)
     const user = this.props.location.state.user
     const product = this.props.location.state.product
-    console.log(user)
-    console.log(product)
     this.setState({user, product})
   }
 
   render() {
     return (
       <Container className={style.root}>
+
         <Item.Group>
           <Item className={style.item}>
             <div className={style.imageRating}>
@@ -45,7 +44,7 @@ export default class ProductView extends Component {
 
             <Item.Content className={style.itemContent}>
               <Item.Header>{this.state.product.name}</Item.Header>
-              <Item.Meta className={style.itemMeta}>{this.state.user.fullName}</Item.Meta>
+              <Item.Meta className={style.itemMeta}>{this.state.user.name} {this.state.user.lastName}</Item.Meta>
               <Item.Extra className={style.itemExtra}>{this.state.user.location.address}</Item.Extra>
               <Item.Description>{this.state.product.description}</Item.Description>
             </Item.Content>
@@ -86,4 +85,4 @@ export default class ProductView extends Component {
   }
 }
 
-ProductView.propTypes = {}
+ProductDetail.propTypes = {}

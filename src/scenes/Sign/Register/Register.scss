@@ -1,0 +1,27 @@
+.root {
+  padding: 1rem;
+  max-width: 400px;
+  margin: auto;
+
+  .logo {
+    margin: auto;
+  }
+
+  .form {
+    margin-top: 1.5rem;
+
+    .formGroupPassword {
+      display: flex;
+      align-items: flex-end;
+      margin-bottom: 1rem;
+
+      .inputPassword{
+        flex: 1!important;
+      }
+
+      .checkShowPass {
+        margin-bottom: 10px!important;
+      }
+    }
+  }
+}

@@ -1,15 +1,15 @@
 import React, {Component} from 'react'
 import GoogleMapReact from 'google-map-react'
 import {Menu, MainButton, ChildButton} from 'react-mfb'
-import EcUserFinderInput from '../UserFinderInput'
-import EcOwnMarker from '../OwnMarker'
-import EcMarker from '../Marker'
-import geolocationService from '../../services/geolocation'
+import EcUserFinderInput from './components/UserFinderInput'
+import EcOwnMarker from './components/OwnMarker'
+import EcMarker from './components/Marker'
+import geolocationService from '@/services/geolocation/index.js'
 import firebase from 'firebase'
 
-import style from './UserFinder.scss'
+import style from './Map.scss'
 
-export default class UserFinder extends Component {
+export default class Map extends Component {
   constructor(props) {
     super(props)
 
@@ -24,7 +24,7 @@ export default class UserFinder extends Component {
       },
       zoom: 17,
       showMap: false,
-      users: []
+        users: []
     }
   }
 
@@ -41,7 +41,7 @@ export default class UserFinder extends Component {
     // snapshot -> captura de la bd en ese momento
     // napshot.val() -> valor q contiene snapshot
     messageRef.on('child_added', snapshot => {
-      console.info(`new user -> ${snapshot.val()}`)
+      console.info('new user ->', snapshot.val())
       users = users.concat(snapshot.val())
       this.setState({users})
     })
@@ -88,16 +88,13 @@ export default class UserFinder extends Component {
   }
 
   render() {
-    const user = {
-      image: 'https://randomuser.me/api/portraits/thumb/men/51.jpg'
-    }
     return (
       <div className={style.root}>
         <EcUserFinderInput className={style.userFinderInput}></EcUserFinderInput>
 
-        <Menu effect="zoomin" method="hover" position="br">
+        <Menu effect="zoomin" method="hover" position="bl">
           <MainButton iconResting="ion-ios-eye" iconActive="ion-ios-eye-outline"/>
-          <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={() => this.props.history.push('/user-finder-map')}/>
+          <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={() => this.props.history.push('/map')}/>
           <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('/users-list')}/>
         </Menu>
 

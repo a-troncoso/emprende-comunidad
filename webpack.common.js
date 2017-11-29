@@ -3,7 +3,6 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const merge = require('webpack-merge')
-// const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
   resolve: {
@@ -11,7 +10,10 @@ module.exports = {
     modules: [
       path.join(__dirname, 'src'),
       'node_modules'
-    ]
+    ],
+    alias: {
+      '@': path.resolve(__dirname, './src')
+    }
   },
   entry: [
     'webpack-dev-server/client',

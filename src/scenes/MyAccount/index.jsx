@@ -6,7 +6,10 @@ export default class MyAccount extends Component {
   }
 
   render() {
-    return (<div>MyAccount</div>);
+    return (<div>
+      <h1>MyAccount</h1>
+      <button onClick={()=>console.log(this.props)}>GO</button>
+      </div>);
   }
 }
 

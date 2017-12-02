@@ -1,0 +1,10 @@
+@import '~sass/variables/colors.scss';
+
+.root {
+  margin-top: 3rem;
+}
+
+.avatarPic {
+  margin: 0 auto 1rem;
+  border: 2px solid $primary-color;
+}

@@ -27,41 +27,61 @@ export default class SidebarMenu extends Component {
     super(props);
 
     this.state = {
-      visible: false
+      sidebarVisibility: false
     }
 
     this.toggleVisibility = this.toggleVisibility.bind(this)
     this.handleGoTo = this.handleGoTo.bind(this)
+    this.handleOutsideClick = this.handleOutsideClick.bind(this)
   }
 
   toggleVisibility() {
-    console.log(this.state)
+    if (!this.state.sidebarVisibility) {
+      // attach/remove event handler on document
+      document.addEventListener('click', this.handleOutsideClick, false)
+    } else {
+      document.removeEventListener('click', this.handleOutsideClick, false)
+    }
+
     this.setState({
-      visible: !this.state.visible
+      sidebarVisibility: !this.state.sidebarVisibility
     })
   }
 
+  handleOutsideClick(e) {
+    // ignore clicks on the component itself
+    if (this.node && this.node.contains(e.target)) {
+      return
+    }
+
+    this.toggleVisibility()
+  }
+
   handleGoTo(route) {
-    console.log(this.props.history)
+    this.setState({
+      sidebarVisibility: !this.state.sidebarVisibility
+    })
     this.props.history.push(`/app/${route}`)
   }
 
   render() {
     return (<div>
-      <Button onClick={this.toggleVisibility} className={style.sidebarBtn} icon="sidebar"></Button>
       <Sidebar.Pushable as={Segment} className={style.sidebarPushable}>
-        <Sidebar as={Menu} animation='overlay' width='thin' visible={this.state.visible} icon='labeled' vertical inverted>
-          <Menu.Item name='home' className={style.menuItem} onClick={() => this.handleGoTo('my-account')}>
-            <Icon name='user'/> Mi cuenta
-          </Menu.Item>
-          <Menu.Item name='gamepad' className={style.menuItem} onClick={() => this.handleGoTo('settings')}>
-            <Icon name='settings'/> Ajustes
-          </Menu.Item>
-          <Menu.Item name='camera' className={style.menuItem} onClick={() => this.handleGoTo('my-products')}>
-            <Icon name='dropbox'/> Mis productos
-          </Menu.Item>
-        </Sidebar>
-        <Sidebar.Pusher>
+        <Button onClick={this.toggleVisibility} className={style.sidebarBtn} icon="sidebar"></Button>
+        <div ref={node => { this.node = node }}>
+          <Sidebar  as={Menu} animation='overlay' width='thin' visible={this.state.sidebarVisibility} icon='labeled' vertical inverted>
+            <Menu.Item name='home' className={style.menuItem} onClick={() => this.handleGoTo('my-account')}>
+              <Icon name='user'/> Mi cuenta
+            </Menu.Item>
+            <Menu.Item name='gamepad' className={style.menuItem} onClick={() => this.handleGoTo('settings')}>
+              <Icon name='settings'/> Ajustes
+            </Menu.Item>
+            <Menu.Item name='camera' className={style.menuItem} onClick={() => this.handleGoTo('my-products')}>
+              <Icon name='dropbox'/> Mis productos
+            </Menu.Item>
+          </Sidebar>
+        </div>
+        <Sidebar.Pusher className={style.sidebarPusher}>
           <Route path="/app/map" exact component={EcMap}/>
           <Route path="/app/users-list" exact component={EcUsersList}/>
           <Route path="/app/product-view" exact component={EcProductDetail}/>

@@ -1,11 +1,9 @@
-:global {
-  $primary-color: #8ad322;
-  $primary-color-600: darken($primary-color, 5%);
-  $primary-color-700: darken($primary-color, 10%);
-  $primary-color-800: darken($primary-color, 15%);
-  //Sobrescribe color del boton flotante de la esquina
-  $main-color: $primary-color;
+@import '~sass/variables/colors.scss';
 
+//Sobrescribe color del boton flotante de la esquina
+$main-color: $primary-color;
+
+:global {
   //Sobreescritura de estilos de semantic-ui
   .ui.primary.button, .ui.primary.buttons .button {
     background-color: $primary-color;
@@ -19,5 +17,6 @@
       background-color: $primary-color-800;
     }
   }
+  //Importa estilos del componente boton flotante de la esquina
   @import '~mfb/src/mfb.scss';
 }

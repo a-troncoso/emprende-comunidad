@@ -19,7 +19,7 @@ export default class ProductMarkers extends Component {
           return (
             <div className={style.product} key={key}>
               <Link to={{
-                pathname: `/product-view`,
+                pathname: `product-view`,
                 state: {
                   user: this.props.user,
                   product

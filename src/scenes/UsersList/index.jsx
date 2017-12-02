@@ -54,7 +54,7 @@ export default class UsersList extends Component {
                       {user.products.map((product) => {
                         return (
                           <Link to={{
-                            pathname: `/product-view`,
+                            pathname: `/app/product-detail`,
                             state: {product, user}
                           }} key={product.id}>
                             <Segment>
@@ -72,10 +72,10 @@ export default class UsersList extends Component {
             </Segment.Group>
           </Segment>
 
-          <Menu effect="zoomin" method="hover" position="br">
+          <Menu effect="zoomin" method="hover" position="bl">
             <MainButton iconResting="ion-ios-eye" iconActive="ion-ios-eye-outline"/>
-            <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={() => this.props.history.push('/user-finder-map')}/>
-            <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('/places-list')}/>
+            <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={() => this.props.history.push('/app/map')}/>
+            <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('/app/users-list')}/>
           </Menu>
         </div>
       )

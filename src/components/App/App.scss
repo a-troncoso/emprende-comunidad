@@ -23,6 +23,11 @@ $main-color: $primary-color;
     font-style: italic;
     font-size: .8em;
   }
+
+  .help-text {
+    color: $gray-color;
+    font-style: italic;
+  }
   //Importa estilos del componente boton flotante de la esquina
   @import '~mfb/src/mfb.scss';
 }

@@ -6,7 +6,8 @@ import {
   Modal,
   Header,
   Button,
-  Form
+  Form,
+  List
 } from 'semantic-ui-react'
 
 import style from './Settings.scss'
@@ -19,11 +20,21 @@ export default class Settings extends Component {
   render() {
     return (
       <Container className={style.root}>
-        <Segment className={style.setting} textAlign="center"vertical>
-          Programar visibilidad <span className="text-color--dev">(usuario vendedor)</span>
-        </Segment>
-        <Segment className={style.setting} textAlign="center"vertical>
-          Quiero vender algo <span className="text-color--dev">(Usuario normal)</span>
+        <Segment textAlign="center" vertical>
+          <List divided relaxed="very" size="large" selection>
+            <List.Item>
+              <List.Content>
+                <List.Header>Programar visibilidad</List.Header>
+                <span className="help-text">Para que automáticamente aparezcas en la aplicación los días y las horas que quieras</span>
+              </List.Content>
+            </List.Item>
+            <List.Item>
+              <List.Content>
+                <List.Header>Quiero vender algo</List.Header>
+                <span className="help-text">Agrega productos ¡y a vender!</span>
+              </List.Content>
+            </List.Item>
+          </List>
         </Segment>
       </Container>
     );

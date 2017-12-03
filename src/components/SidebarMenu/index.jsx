@@ -70,14 +70,20 @@ export default class SidebarMenu extends Component {
         <Button onClick={this.toggleVisibility} className={style.sidebarBtn} icon="sidebar"></Button>
         <div ref={node => { this.node = node }}>
           <Sidebar  as={Menu} animation='overlay' width='thin' visible={this.state.sidebarVisibility} icon='labeled' vertical inverted>
-            <Menu.Item name='home' className={style.menuItem} onClick={() => this.handleGoTo('my-account')}>
+            <Menu.Item name='map' className={style.menuItem} onClick={() => this.handleGoTo('map')}>
+              <Icon name='map'/> Mapa
+            </Menu.Item>
+            <Menu.Item name='my-account' className={style.menuItem} onClick={() => this.handleGoTo('my-account')}>
               <Icon name='user'/> Mi cuenta
             </Menu.Item>
-            <Menu.Item name='gamepad' className={style.menuItem} onClick={() => this.handleGoTo('settings')}>
+            <Menu.Item name='my-products' className={style.menuItem} onClick={() => this.handleGoTo('my-products')}>
+              <Icon name='dropbox'/> Mis productos
+            </Menu.Item>
+            <Menu.Item name='settings' className={style.menuItem} onClick={() => this.handleGoTo('settings')}>
               <Icon name='settings'/> Ajustes
             </Menu.Item>
-            <Menu.Item name='camera' className={style.menuItem} onClick={() => this.handleGoTo('my-products')}>
-              <Icon name='dropbox'/> Mis productos
+            <Menu.Item name='my-products' className={style.menuItem} onClick={() => this.props.history.push('/')}>
+              <Icon name='log out'/> Salir
             </Menu.Item>
           </Sidebar>
         </div>

@@ -1,9 +1,21 @@
 import React, {Component} from 'react'
 import {Menu, MainButton, ChildButton} from 'react-mfb'
-import {Image, Item, Segment} from 'semantic-ui-react'
+import {
+  Item,
+  Container,
+  Image,
+  Segment,
+  Modal,
+  Header,
+  Button,
+  Form,
+  List
+} from 'semantic-ui-react'
 import StarRatingComponent from 'react-star-rating-component'
 import {Link} from 'react-router-dom'
 import firebase from 'firebase'
+
+import style from './UsersList.scss'
 
 export default class UsersList extends Component {
   constructor(props) {
@@ -12,6 +24,8 @@ export default class UsersList extends Component {
     this.state = {
       users: []
     }
+
+    this.handleGoToRoute = this.handleGoToRoute.bind(this)
   }
 
   componentWillMount() {
@@ -40,46 +54,49 @@ export default class UsersList extends Component {
       })
     }
 
-    render() {
-      return (
-        <div>
-          <Segment>
-            <Segment.Group>
-              {this.state.users.map((user, key) => {
-                return (
-                  <Segment key={user.id}>
-                    <Item.Image size='tiny' shape='circular' src={user.image} onClick={() => this.onShowProducts(user.id)}/>
-                    <span>{user.name} {user.lastName}</span>
-                    {user.showProducts && <Segment.Group>
-                      {user.products.map((product) => {
-                        return (
-                          <Link to={{
-                            pathname: `/app/product-detail`,
-                            state: {product, user}
-                          }} key={product.id}>
-                            <Segment>
-                              <Item.Image size='tiny' shape='circular' src={product.image}/>
-                              <span>{product.name}</span>
-                              <StarRatingComponent name="rate1" starCount={5} value={product.rating}/>
-                            </Segment>
-                          </Link>
-                        )
-                      })}
-                    </Segment.Group>}
-                  </Segment>
-                )
-              })}
-            </Segment.Group>
-          </Segment>
-
-          <Menu effect="zoomin" method="hover" position="bl">
-            <MainButton iconResting="ion-ios-eye" iconActive="ion-ios-eye-outline"/>
-            <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={() => this.props.history.push('/app/map')}/>
-            <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('/app/users-list')}/>
-          </Menu>
-        </div>
-      )
+    handleGoToRoute(params) {
+      this.props.history.push({
+        pathname: `/app/product-view`,
+        state: params
+      })
     }
+
+    render() {
+      return (<Container className={style.root}>
+        <Segment vertical>
+          <List divided relaxed="very" selection verticalAlign='middle' size="large">
+            {
+              this.state.users.map((user, key) => {
+                return (<List.Item onClick={() => this.onShowProducts(user.id)} key={key}>
+                  <Image avatar src={user.image}/>
+                  <List.Content>
+                    <List.Header>{user.name} {user.lastName}</List.Header>
+                  </List.Content>
+                  {
+                    user.showProducts && <List divided  verticalAlign='middle'>
+                        {
+                          user.products.map((product, key) => {
+                            return (<List.Item onClick={() => this.handleGoToRoute({product, user})} key={key}>
+                              <Image avatar src={product.image}/>
+                              <List.Content>
+                                <List.Header>{product.name}</List.Header>
+                              </List.Content>
+                            </List.Item>)
+                          })
+                        }</List>
+                  }</List.Item>)
+              })
+            }
+          </List>
+        </Segment>
+        <Menu effect="zoomin" method="hover" position="bl">
+          <MainButton iconResting="ion-ios-eye" iconActive="ion-ios-eye-outline"/>
+          <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={() => this.props.history.push('/app/map')}/>
+          <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('/app/users-list')}/>
+        </Menu>
+      </Container>)
+    }
+
   }
 
   UsersList.propTypes = {}

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import firebase from 'firebase'
 import geolocationService from '@/services/geolocation'
-import {Button, Form, Container, Checkbox, Image} from 'semantic-ui-react'
+import {Button, Form, Container, Checkbox, Image, Divider} from 'semantic-ui-react'
 import logo from '@/assets/images/community-logo.jpg'
 
 import style from './Register.scss'
@@ -109,18 +109,24 @@ export default class Register extends Component {
   render() {
     return (<div className={style.root}>
       <Image className={style.logo} alt="community_logo" src={logo} size='tiny' />
-      <Form className={style.form}>
-        <Form.Group widths='equal'>
-          <Form.Input label='Nombre' type="text" name="name" value={this.state.seller.name} onChange={this.handleInputChange} placeholder=''/>
-          <Form.Input label='Apellidos' type="text" name="lastName" value={this.state.seller.lastName} onChange={this.handleInputChange} placeholder=''/>
-        </Form.Group>
-        <Form.Input type="email" label='Correo electrónico' name="email" value={this.state.seller.email} onChange={this.handleInputChange} placeholder=''></Form.Input>
-        <Form.Group className={style.formGroupPassword}>
-          <Form.Input label='Contraseña' className={style.inputPassword} type={this.state.password.type} name="password" value={this.state.seller.password} onChange={this.handleInputChange} placeholder=''></Form.Input>
-          <Form.Checkbox type="checkbox" className={style.checkShowPass} label='Mostrar' name="showPassword" checked={this.state.password.show} onChange={this.handleToggleCheckbox}></Form.Checkbox>
-        </Form.Group>
-        <Button type='submit' className="primary" onClick={this.handleSubmitSeller} disabled={this.state.enterButton.disabled} fluid>Regístrate</Button>
-      </Form>
+
+      <div className={style.registerOptions}>
+        <Button className="facebook" fluid>Registro con Facebook</Button>
+        <Divider horizontal>o</Divider>
+        <Form className={style.form}>
+          <Form.Group widths='equal'>
+            <Form.Input label='Nombre' type="text" name="name" value={this.state.seller.name} onChange={this.handleInputChange} placeholder=''/>
+            <Form.Input label='Apellidos' type="text" name="lastName" value={this.state.seller.lastName} onChange={this.handleInputChange} placeholder=''/>
+          </Form.Group>
+          <Form.Input type="email" label='Correo electrónico' name="email" value={this.state.seller.email} onChange={this.handleInputChange} placeholder=''></Form.Input>
+          <Form.Group className={style.formGroupPassword}>
+            <Form.Input label='Contraseña' className={style.inputPassword} type={this.state.password.type} name="password" value={this.state.seller.password} onChange={this.handleInputChange} placeholder=''></Form.Input>
+            <Form.Checkbox type="checkbox" className={style.checkShowPass} label='Mostrar' name="showPassword" checked={this.state.password.show} onChange={this.handleToggleCheckbox}></Form.Checkbox>
+          </Form.Group>
+          <Button type='submit' className="primary" onClick={this.handleSubmitSeller} disabled={this.state.enterButton.disabled} fluid>Regístrate</Button>
+        </Form>
+      </div>
+
     </div>);
   }
 }

@@ -1,0 +1,22 @@
+@import '~sass/variables/colors.scss';
+
+.root {
+  cursor: pointer;
+}
+
+.avatarPic {
+  left: 50%;
+  display: inline-block!important;
+  margin: 0 auto 1rem;
+  border: 2px solid $primary-color;
+  transform: translateX(-50%);
+}
+
+.avatarFile {
+  position: absolute;
+  width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	z-index: -1;
+}

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Container, Card, Icon, Image } from 'semantic-ui-react'
+import {Menu, MainButton, ChildButton} from 'react-mfb'
 
 import style from './MyProducts.scss'
 
@@ -46,7 +47,7 @@ export default class MyProducts extends Component {
     ]
     return (
       <Container className={style.root}>
-        <Card.Group>
+        <Card.Group className={style.cardGroup} stackable>
         {products.map((product, key) => {
           return (
             <Card key={key}>
@@ -55,11 +56,6 @@ export default class MyProducts extends Component {
                 <Card.Header>
                   {product.name}
                 </Card.Header>
-                {/*<Card.Meta>
-                  <span className='date'>
-                    Joined in 2015
-                  </span>
-                </Card.Meta>*/}
                 <Card.Description>
                   {product.description}
                 </Card.Description>
@@ -82,6 +78,12 @@ export default class MyProducts extends Component {
           )
         })}
         </Card.Group>
+
+        <Menu effect="zoomin" method="click" position="br">
+          <MainButton iconResting="ion-plus" iconActive="ion-plus"/>
+          {/*<ChildButton icon="ion-social-dropbox-outline" label="Agregar producto" />*/}
+          {/*<ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('users-list')}/>*/}
+        </Menu>
 
       </Container>
     );

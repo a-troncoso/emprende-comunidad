@@ -1,4 +1,15 @@
 import React, {Component} from 'react';
+import {
+  Container,
+  Image,
+  Segment,
+  Modal,
+  Header,
+  Button,
+  Form
+} from 'semantic-ui-react'
+
+import style from './Settings.scss'
 
 export default class Settings extends Component {
   constructor(props) {
@@ -6,7 +17,16 @@ export default class Settings extends Component {
   }
 
   render() {
-    return (<div>Settings</div>);
+    return (
+      <Container className={style.root}>
+        <Segment className={style.setting} textAlign="center"vertical>
+          Programar visibilidad <span className="text-color--dev">(usuario vendedor)</span>
+        </Segment>
+        <Segment className={style.setting} textAlign="center"vertical>
+          Quiero vender algo <span className="text-color--dev">(Usuario normal)</span>
+        </Segment>
+      </Container>
+    );
   }
 }
 

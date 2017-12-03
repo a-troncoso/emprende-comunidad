@@ -43,8 +43,6 @@ export default class Main extends Component {
   }
 
   handleGoTo(route) {
-    console.log(this.history)
-    console.log(history)
     history.push(`/${route}`)
   }
 

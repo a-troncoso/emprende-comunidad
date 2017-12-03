@@ -17,6 +17,12 @@ $main-color: $primary-color;
       background-color: $primary-color-800;
     }
   }
+
+  .text-color--dev {
+    color: $disabled-color;
+    font-style: italic;
+    font-size: .8em;
+  }
   //Importa estilos del componente boton flotante de la esquina
   @import '~mfb/src/mfb.scss';
 }

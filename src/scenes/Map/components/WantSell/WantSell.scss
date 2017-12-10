@@ -1,0 +1,30 @@
+@import '~sass/variables/colors.scss';
+
+$verde: #fafff3;
+$verde-600: darken($verde, 5%);
+$verde-700: darken($verde, 10%);
+
+.root {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  margin-bottom: 25px;
+  padding: 14px 38px;
+  color: #3e3e3e;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  transform: translateX(-50%);
+  border-radius: 4px;
+  border: 1px double $primary-color;
+  background-color: $verde;
+  cursor: pointer;
+  z-index: 1;
+  &:hover {
+    background-color: $verde-600;
+  }
+  &:active {
+    background-color: $verde-700;
+  }
+}

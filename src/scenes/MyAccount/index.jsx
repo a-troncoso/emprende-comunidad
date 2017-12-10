@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import EcDataTextField from './components/DataTextField'
-import EcImageInputFile from './components/ImageInputFile'
+import EcImageInputFile from '@/components/ImageInputFile'
 import {Container, Image, Segment} from 'semantic-ui-react'
 
+import defaultAvatarPic from '@/assets/images/default-avatar.png'
 import style from './MyAccount.scss'
 
 export default class MyAccount extends Component {
@@ -46,15 +47,15 @@ export default class MyAccount extends Component {
       }
     ]
 
-    return (<Container className={style.root}>
-      <EcImageInputFile></EcImageInputFile>
-      <Segment textAlign="center" className={style.dataTextField} vertical>
+    return (<Container className={style.root}  textAlign="center">
+      <EcImageInputFile shape="circular" placeholder={defaultAvatarPic} className={style.imageInputFile}></EcImageInputFile>
+      <Segment className={style.dataTextField} vertical>
         <EcDataTextField field={fields[0]}></EcDataTextField>
       </Segment>
-      <Segment textAlign="center" className={style.dataTextField} vertical>
+      <Segment className={style.dataTextField} vertical>
         <EcDataTextField field={fields[1]}></EcDataTextField>
       </Segment>
-      <Segment textAlign="center" className={style.dataTextField} vertical>
+      <Segment className={style.dataTextField} vertical>
         <EcDataTextField field={fields[2]}></EcDataTextField>
       </Segment>
     </Container>)

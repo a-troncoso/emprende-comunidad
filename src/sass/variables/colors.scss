@@ -3,6 +3,11 @@ $primary-color-600: darken($primary-color, 5%);
 $primary-color-700: darken($primary-color, 10%);
 $primary-color-800: darken($primary-color, 15%);
 
+$primary-color-400: lighten($primary-color, 5%);
+$primary-color-300: lighten($primary-color, 10%);
+$primary-color-200: lighten($primary-color, 15%);
+$primary-color-100: lighten($primary-color, 20%);
+
 $gray-color: gray;
 
 $disabled-color: rgb(159, 159, 159)

@@ -4,7 +4,8 @@ import {Menu, MainButton, ChildButton} from 'react-mfb'
 import EcUserFinderInput from './components/UserFinderInput'
 import EcOwnMarker from './components/OwnMarker'
 import EcMarker from './components/Marker'
-import EcWantSell from './components/WantSell'
+import EcWantSellButton from './components/WantSell'
+import EcRegisterButton from './components/RegisterButton'
 import geolocationService from '@/services/geolocation/index.js'
 import firebase from 'firebase'
 
@@ -99,7 +100,8 @@ export default class Map extends Component {
           <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('users-list')}/>
         </Menu>
 
-        <EcWantSell></EcWantSell>
+        <EcWantSellButton></EcWantSellButton>
+        <EcRegisterButton></EcRegisterButton>
 
         {this.state.showMap && <GoogleMapReact bootstrapURLKeys={{
           key: 'AIzaSyC0FT8GbyxW9iqYx65r0ibCUpY78sjrRhs',

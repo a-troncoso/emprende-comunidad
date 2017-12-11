@@ -10,4 +10,9 @@ $primary-color-100: lighten($primary-color, 20%);
 
 $gray-color: gray;
 
+$red-color: #ff695e;
+$red-color-600: darken($red-color, 5%);
+$red-color-700: darken($red-color, 10%);
+$red-color-800: darken($red-color, 15%);
+
 $disabled-color: rgb(159, 159, 159)

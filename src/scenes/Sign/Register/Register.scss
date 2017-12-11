@@ -1,3 +1,5 @@
+@import '~sass/variables/colors.scss';
+
 .root {
   padding: 1rem;
   max-width: 400px;
@@ -13,6 +15,25 @@
 
   .form {
     margin-top: 1.5rem;
+
+    // .valueProductCheck {
+    //   input:checked~label:before {
+    //     background-color: $primary-color!important;
+    //   }
+    // }
+
+    .coutrySelector, .areaSelector {
+      min-width: 90px;
+    }
+
+    .phoneGroup {
+      label {
+        font-weight: bold;
+      }
+      .phoneFields {
+        margin: 0!important;
+      }
+    }
 
     .formGroupPassword {
       display: flex;

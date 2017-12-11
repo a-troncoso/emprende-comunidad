@@ -3,6 +3,7 @@ import {Route, Redirect} from 'react-router-dom'
 import EcSplash from '@/scenes/Home/scenes/Splash'
 import EcMap from '@/scenes/Map'
 import EcSeller from '@/scenes/Sign/Register'
+import EcSellerVisitor from '@/scenes/SellerVisitor'
 import EcRegisterStepper from '@/scenes/Sign/RegisterStepper'
 import {
   Sidebar,
@@ -48,6 +49,7 @@ export default class Main extends Component {
       <Route path="/" exact component={EcSplash}/>
       <Route path="/register" exact component={EcSeller}/>
       <Route path="/visitor" exact component={EcMap}/>
+      <Route path="/seller-visitor" exact component={EcSellerVisitor}/>
       <Route path="/register-stepper" exact component={EcRegisterStepper}/>
       <Route path="/app" component={EcSidebarMenu}/>
     </main>)

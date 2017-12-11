@@ -1,0 +1,79 @@
+@import '~sass/variables/colors.scss';
+
+.root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, .9);
+  z-index: 9000;
+}
+
+.messageContainer {
+  position: absolute;
+  width: 75%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.title, .para1, .para2 {
+  text-align: center;
+  color: #fff!important;
+}
+.para1 {
+  font-weight: normal!important;
+}
+
+.emphasis {
+  color: $primary-color!important;
+}
+
+.options {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.acceptButton {
+  color: $primary-color!important;
+  font-weight: 400;
+  text-transform: none;
+  text-shadow: none!important;
+  box-shadow: 0 0 0 1px $primary-color inset!important;
+  background: transparent none!important;
+  border-radius: .28571429rem;
+  &:hover {
+    box-shadow: 0 0 0 1px $primary-color-600 inset!important;
+    color: $primary-color-600!important;
+  }
+  &:focus {
+    box-shadow: 0 0 0 1px $primary-color-700 inset!important;
+    color: $primary-color-700!important;
+  }
+  &:active {
+    box-shadow: 0 0 0 1px $primary-color-800 inset!important;
+    color: $primary-color-800!important;
+  }
+}
+.cancelButton {
+  color: $red-color!important;
+  font-weight: 400;
+  text-transform: none;
+  text-shadow: none!important;
+  box-shadow: 0 0 0 1px $red-color inset!important;
+  background: transparent none!important;
+  border-radius: .28571429rem;
+  &:hover {
+    box-shadow: 0 0 0 1px $red-color-600 inset!important;
+    color: $red-color-600!important;
+  }
+  &:focus {
+    box-shadow: 0 0 0 1px $red-color-700 inset!important;
+    color: $red-color-700!important;
+  }
+  &:active {
+    box-shadow: 0 0 0 1px $red-color-800 inset!important;
+    color: $red-color-800!important;
+  }
+}

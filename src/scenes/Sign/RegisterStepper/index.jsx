@@ -13,26 +13,11 @@ export default class RegisterStepper extends Component {
     this.state = {
       steps: [
         {
-          title: 'Agrega producto',
-          href: 'http://example1.com',
-          onClick: (e) => {
-            e.preventDefault()
-            console.log('onClick Agregar productos')
-          }
+          title: 'Agrega producto'
         }, {
-          title: 'Ingresa tus datos',
-          href: 'http://example2.com',
-          onClick: (e) => {
-            e.preventDefault()
-            console.log('onClick Ingresar datos')
-          }
+          title: 'Ingresa tus datos'
         }, {
-          title: '¡Listo!',
-          href: 'http://example3.com',
-          onClick: (e) => {
-            e.preventDefault()
-            console.log('onClick Confirmar')
-          }
+          title: '¡Listo!'
         }
       ],
       currentStep: 0
@@ -65,7 +50,7 @@ export default class RegisterStepper extends Component {
       {this.state.currentStep === 0 && <EcAddProducts/>}
       {this.state.currentStep === 1 && <EcEnterData/>}
       {this.state.currentStep === 2 && <EcConfirm/>}
-      <Button onClick={this.onClickNext} className={`primary ${style.nextBtn}`} fluid>Siguiente</Button>
+      {this.state.currentStep < 2 && <Button onClick={this.onClickNext} className={`primary ${style.nextBtn}`} fluid>Siguiente</Button>}
     </Container>);
   }
 }

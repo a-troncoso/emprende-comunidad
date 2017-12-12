@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Route} from 'react-router-dom'
-import EcMap from '@/scenes/Map'
+import EcMap from '@/components/Map'
 import EcUsersList from '@/scenes/UsersList'
 import EcProductDetail from '@/scenes/ProductDetail'
 import EcMyAccount from '@/scenes/MyAccount'

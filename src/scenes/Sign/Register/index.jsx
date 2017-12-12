@@ -125,7 +125,7 @@ export default class Register extends Component {
   }
 
   render() {
-    const countryOptions = [{ key: 'af', value: 'af', flag: 'af', text: '+56' }]
+    const countryOptions = [{ key: 'cl', value: 'cl', flag: 'cl', text: '+56' }]
     const areaOptions = [
       { key: '9', value: '9', text: '9' },
       { key: '8', value: '8', text: '8' },
@@ -153,8 +153,8 @@ export default class Register extends Component {
           <div className={`field ${style.phoneGroup}`}>
             <label>Teléfono</label>
             <Form.Group className={` ${style.phoneFields}`}>
-              <Select placeholder='Código...' className={style.coutrySelector} options={countryOptions}/>
-              <Select placeholder='Código...' className={style.areaSelector} options={areaOptions}/>
+              <Select placeholder='Código...' className={style.coutrySelector} options={countryOptions} value="cl"/>
+              <Select placeholder='Código...' className={style.areaSelector} options={areaOptions} value="9"/>
               <Input type="number" name="phoneNumber" value={this.state.seller.phoneNumber} onChange={this.handleInputChange} placeholder='Teléfono'/>
             </Form.Group>
           </div>

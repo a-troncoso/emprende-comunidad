@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import EcImportantMessage from '@/components/ImportantMessage'
-import EcMap from '@/scenes/Map'
+import EcMap from '@/components/Map'
+import EcRegisterButton from '@/components/Map/components/RegisterButton'
 
 export default class SellerVisitor extends Component {
   constructor(props) {
@@ -27,7 +28,8 @@ export default class SellerVisitor extends Component {
   render() {
     return (<div>
       {this.state.showImportantMessage && <EcImportantMessage onAccept={this.handleRegister} onCancel={this.handleCancel}></EcImportantMessage>}
-      <EcMap ></EcMap>
+      <EcMap></EcMap>
+      <EcRegisterButton></EcRegisterButton>
     </div>);
   }
 }

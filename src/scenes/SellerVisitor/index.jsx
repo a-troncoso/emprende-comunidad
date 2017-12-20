@@ -1,37 +1,23 @@
 import React, {Component} from 'react'
-import EcImportantMessage from '@/components/ImportantMessage'
-import EcMap from '@/components/Map'
-import EcRegisterButton from '@/components/Map/components/RegisterButton'
+import {Route} from 'react-router-dom'
+import EcSellerVisitorMap from './scenes/SellerVisitorMap'
+import EcRegister from '@/scenes/Sign/Register'
+import EcUsersList from '@/scenes/UsersList'
+import EcProductDetail from '@/scenes/ProductDetail'
 
 export default class SellerVisitor extends Component {
   constructor(props) {
     super(props)
-
-    this.state = {
-      showImportantMessage: true
-    }
-
-    this.handleRegister = this.handleRegister.bind(this)
-    this.handleCancel = this.handleCancel.bind(this)
-  }
-
-  handleRegister() {
-    this.props.history.push('/register')
-  }
-
-  handleCancel() {
-    this.setState({
-      showImportantMessage: false
-    })
   }
 
   render() {
     return (<div>
-      {this.state.showImportantMessage && <EcImportantMessage onAccept={this.handleRegister} onCancel={this.handleCancel}></EcImportantMessage>}
-      <EcMap></EcMap>
-      <EcRegisterButton></EcRegisterButton>
-    </div>);
+      <Route path="/seller-visitor/map" exact component={EcSellerVisitorMap}/>
+      <Route path="/seller-visitor/register" exact component={EcRegister}/>
+      <Route path="/seller-visitor/users-list" exact component={EcUsersList}/>
+      <Route path="/seller-visitor/product-view" exact component={EcProductDetail}/>
+    </div>)
   }
 }
 
-SellerVisitor.propTypes = {};
+SellerVisitor.propTypes = {}

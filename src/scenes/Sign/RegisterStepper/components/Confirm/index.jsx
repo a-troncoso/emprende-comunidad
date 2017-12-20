@@ -7,7 +7,7 @@ import style from './Confirm.scss'
 const Confirm = (props) => {
   return (
     <div>
-      <Header textAlign="center" as='h4'>Ahora revisa tu correo, desde ahí podrás activar tu publicación</Header>
+      <Header textAlign="center" as='h4'>Ahora revisa tu correo, ¡desde ahí podrás activar tu publicación!</Header>
       <Image size="large" className={style.checkEmailImage} src={checkEmailImage} centered></Image>
     </div>
   )

@@ -11,12 +11,7 @@ import {
   Segment,
   Menu,
   Icon,
-  Grid,
-  Image,
-  Container,
   Item,
-  Comment,
-  Header,
   Button
 } from 'semantic-ui-react'
 
@@ -69,7 +64,7 @@ export default class SidebarMenu extends Component {
       <Sidebar.Pushable as={Segment} className={style.sidebarPushable}>
         <Button onClick={this.toggleVisibility} className={style.sidebarBtn} icon="sidebar"></Button>
         <div ref={node => { this.node = node }}>
-          <Sidebar  as={Menu} animation='overlay' width='thin' visible={this.state.sidebarVisibility} icon='labeled' vertical inverted>
+          <Sidebar as={Menu} animation='overlay' width='thin' visible={this.state.sidebarVisibility} icon='labeled' vertical inverted>
             <Menu.Item name='map' className={style.menuItem} onClick={() => this.handleGoTo('map')}>
               <Icon name='map'/> Mapa
             </Menu.Item>
@@ -88,7 +83,9 @@ export default class SidebarMenu extends Component {
           </Sidebar>
         </div>
         <Sidebar.Pusher className={style.sidebarPusher}>
-          <Route path="/app/map" exact component={EcMap}/>
+          <Route path="/app/map" exact render={routeProps => <EcMap {...routeProps} onGoToProductDetail={() => {
+              this.props.history.push('/app/product-view')
+            }}/>}/>
           <Route path="/app/users-list" exact component={EcUsersList}/>
           <Route path="/app/product-view" exact component={EcProductDetail}/>
           <Route path="/app/my-account" exact component={EcMyAccount}/>

@@ -5,7 +5,7 @@ import style from './RegisterButton.scss'
 
 const RegisterButton = (props) => {
   return (
-    <button className={style.root}>Registrarme</button>
+    <button className={style.root} onClick={props.onClick}>Registrarme</button>
   )
 }
 

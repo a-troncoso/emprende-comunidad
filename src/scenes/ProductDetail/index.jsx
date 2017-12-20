@@ -1,6 +1,5 @@
-import React, {PropTypes, Component} from 'react'
+import React, {Component} from 'react'
 import {
-  Grid,
   Image,
   Container,
   Item,
@@ -9,7 +8,6 @@ import {
 } from 'semantic-ui-react'
 import StarRatingComponent from 'react-star-rating-component'
 import Slider from 'react-slick'
-import EcSidebarMenu from '@/components/SidebarMenu'
 
 import style from './ProductDetail.scss'
 
@@ -18,16 +16,30 @@ export default class ProductDetail extends Component {
     super(props)
 
     this.state = {
-      user: {},
-      product: {}
+      user: {
+        name: 'Juana',
+        lastName: 'Machuca',
+        location: {address: 'Villa Los Alerces #2214'}
+      },
+      product: {
+        pictures: [{url:'https://www.arcuma.com/dr.cannabis/pics/temp-0000-cnbc.jpg'}],
+        rating: 5,
+        name: 'Quequito canábico',
+        description: 'Rico rico todo muy rico',
+        price: '1200',
+        comments: [{
+          user: {
+            avatarUrl: '',
+            name: ''
+          },
+          publicationDate: '',
+          comment: ''
+        }]
+      }
     }
   }
 
-  componentWillMount() {
-    const user = this.props.location.state.user
-    const product = this.props.location.state.product
-    this.setState({user, product})
-  }
+  componentWillMount() {}
 
   render() {
     return (

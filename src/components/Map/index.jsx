@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
+import {PropTypes} from 'prop-types'
 import GoogleMapReact from 'google-map-react'
 import {Menu, MainButton, ChildButton} from 'react-mfb'
 import EcUserFinderInput from './components/UserFinderInput'
 import EcOwnMarker from './components/OwnMarker'
 import EcMarker from './components/Marker'
-import EcRegisterButton from './components/RegisterButton'
 import geolocationService from '@/services/geolocation/index.js'
 import firebase from 'firebase'
 
@@ -25,7 +25,7 @@ export default class Map extends Component {
       },
       zoom: 17,
       showMap: false,
-        users: []
+      users: []
     }
   }
 
@@ -89,28 +89,32 @@ export default class Map extends Component {
   }
 
   render() {
-    return (
-      <div className={style.root}>
-        <EcUserFinderInput className={style.userFinderInput}></EcUserFinderInput>
+    return (<div className={style.root}>
+      <EcUserFinderInput className={style.userFinderInput}></EcUserFinderInput>
 
-        <Menu effect="zoomin" method="hover" position="bl">
-          <MainButton iconResting="ion-ios-eye" iconActive="ion-ios-eye-outline"/>
-          <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={() => this.props.history.push('map')}/>
-          <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('users-list')}/>
-        </Menu>
+      <Menu effect="zoomin" method="hover" position="bl">
+        <MainButton iconResting="ion-ios-eye" iconActive="ion-ios-eye-outline"/>
+        <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={() => this.props.history.push('map')}/>
+        <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('users-list')}/>
+      </Menu>
 
-        {this.state.showMap && <GoogleMapReact bootstrapURLKeys={{
-          key: 'AIzaSyC0FT8GbyxW9iqYx65r0ibCUpY78sjrRhs',
-          language: 'es'
-        }} center={this.state.center} defaultZoom={this.state.zoom}>
-          <EcOwnMarker lat={this.state.ownPosition.lat} lng={this.state.ownPosition.lng}></EcOwnMarker>
-          {this.state.users.map((user, key) => {
-            return (
-              <EcMarker lat={user.location.lat} lng={user.location.lng} user={user} key={key}></EcMarker>
-            )
-          })}
-        </GoogleMapReact>}
-      </div>
-    )
+      {
+        this.state.showMap && <GoogleMapReact bootstrapURLKeys={{
+              key: 'AIzaSyC0FT8GbyxW9iqYx65r0ibCUpY78sjrRhs',
+              language: 'es'
+            }} center={this.state.center} defaultZoom={this.state.zoom}>
+            <EcOwnMarker lat={this.state.ownPosition.lat} lng={this.state.ownPosition.lng}></EcOwnMarker>
+            {
+              this.state.users.map((user, key) => {
+                return (<EcMarker lat={user.location.lat} lng={user.location.lng} onGoToProductDetail={this.props.onGoToProductDetail} user={user} key={key}></EcMarker>)
+              })
+            }
+          </GoogleMapReact>
+      }
+    </div>)
   }
+}
+
+Map.propTypes = {
+  onGoToProductDetail: PropTypes.func.isRequired
 }

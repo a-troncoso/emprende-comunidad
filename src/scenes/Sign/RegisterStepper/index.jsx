@@ -8,7 +8,7 @@ import style from './RegisterStepper.scss'
 
 export default class RegisterStepper extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       steps: [
@@ -30,7 +30,7 @@ export default class RegisterStepper extends Component {
     const {steps, currentStep} = this.state;
     this.setState({
       currentStep: currentStep + 1
-    });
+    })
   }
 
   render() {
@@ -51,8 +51,6 @@ export default class RegisterStepper extends Component {
       {this.state.currentStep === 1 && <EcEnterData/>}
       {this.state.currentStep === 2 && <EcConfirm/>}
       {this.state.currentStep < 2 && <Button onClick={this.onClickNext} className={`primary ${style.nextBtn}`} fluid>Siguiente</Button>}
-    </Container>);
+    </Container>)
   }
 }
-
-RegisterStepper.propTypes = {};

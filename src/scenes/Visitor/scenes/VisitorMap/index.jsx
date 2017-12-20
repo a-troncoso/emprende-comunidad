@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import EcMap from '@/components/Map'
-import EcWantSellButton from './components/WantSell'
+import EcWantSellButton from './components/WantSellButton'
 
 export default class VisitorMap extends Component {
   constructor(props) {
@@ -9,8 +9,10 @@ export default class VisitorMap extends Component {
 
   render() {
     return (<div>
-      <EcMap></EcMap>
-      <EcWantSellButton onWantBeSeller={() => {this.props.history.push('/visitor/register')}}></EcWantSellButton>
+      <EcMap onGoToProductDetail={() => {
+          this.props.history.push('/visitor/product-view')
+        }}></EcMap>
+      <EcWantSellButton onWantBeSeller={() => {this.props.history.push('/visitor/register-stepper')}}></EcWantSellButton>
     </div>);
   }
 }

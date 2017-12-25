@@ -28,12 +28,6 @@ export default class Settings extends Component {
                 <span className="help-text">Para que automáticamente aparezcas en la aplicación los días y las horas que quieras</span>
               </List.Content>
             </List.Item>
-            <List.Item>
-              <List.Content>
-                <List.Header>Quiero vender algo</List.Header>
-                <span className="help-text">Agrega productos ¡y a vender!</span>
-              </List.Content>
-            </List.Item>
           </List>
         </Segment>
       </Container>

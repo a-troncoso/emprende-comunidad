@@ -10,11 +10,9 @@
 }
 
 .avatarPic {
-  // left: 50%;
   display: inline-block!important;
-  // margin: 0 auto 1rem;
   border: 2px solid $primary-color;
-  // transform: translateX(-50%);
+  border-radius: 5px;
 }
 
 .avatarFile {

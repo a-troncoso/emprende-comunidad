@@ -85,8 +85,18 @@ export default class SidebarMenu extends Component {
         <Sidebar.Pusher className={style.sidebarPusher}>
           <Route path="/app/map" exact render={routeProps => <EcMap {...routeProps} onGoToProductDetail={() => {
               this.props.history.push('/app/product-view')
-            }}/>}/>
-          <Route path="/app/users-list" exact component={EcUsersList}/>
+            }} onGoToUsersList={() => {
+              this.props.history.push('/app/users-list')
+            }} onGoToMap={() =>
+            {this.props.history.push('/app/map')}}/>}/>
+          <Route path="/app/users-list" exact  render={routeProps => <EcUsersList {...routeProps} onGoToProductDetail={() => {
+                this.props.history.push('/app/product-view')
+              }} onGoToUsersList={() =>
+              {this.props.history.push('/app/users-list')}} onGoToMap={
+                () => {
+                  this.props.history.push('/app/map')
+                }
+              }/>}/>
           <Route path="/app/product-view" exact component={EcProductDetail}/>
           <Route path="/app/my-account" exact component={EcMyAccount}/>
           <Route path="/app/settings" exact component={EcSettings}/>

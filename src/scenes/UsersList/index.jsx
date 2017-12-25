@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {Menu, MainButton, ChildButton} from 'react-mfb'
 import {
   Item,
@@ -76,7 +77,7 @@ export default class UsersList extends Component {
                     user.showProducts && <List divided  verticalAlign='middle'>
                         {
                           user.products.map((product, key) => {
-                            return (<List.Item onClick={() => this.handleGoToRoute({product, user})} key={key}>
+                            return (<List.Item onClick={this.props.onGoToProductDetail} key={key}>
                               <Image avatar src={product.image}/>
                               <List.Content>
                                 <List.Header>{product.name}</List.Header>
@@ -91,12 +92,16 @@ export default class UsersList extends Component {
         </Segment>
         <Menu effect="zoomin" method="hover" position="bl">
           <MainButton iconResting="ion-ios-eye" iconActive="ion-ios-eye-outline"/>
-          <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={() => this.props.history.push('/app/map')}/>
-          <ChildButton icon="ion-android-list" label="Ver lista" onClick={() => this.props.history.push('/app/users-list')}/>
+          <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={this.props.onGoToMap}/>
+          <ChildButton icon="ion-android-list" label="Ver lista" onClick={this.props.onGoToUsersList}/>
         </Menu>
       </Container>)
     }
 
   }
 
-  UsersList.propTypes = {}
+  UsersList.propTypes = {
+    onGoToProductDetail: PropTypes.func.isRequired,
+    onGoToUsersList: PropTypes.func.isRequired,
+    onGoToMap: PropTypes.func.isRequired,
+  }

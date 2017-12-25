@@ -3,10 +3,10 @@ import {
   Image,
   Container,
   Item,
-  Comment,
   Header
 } from 'semantic-ui-react'
-import StarRatingComponent from 'react-star-rating-component'
+import EcProductDetailHeader from './components/ProductDetailHeader'
+import EcProductComments from './components/ProductComments'
 import Slider from 'react-slick'
 
 import style from './ProductDetail.scss'
@@ -29,39 +29,27 @@ export default class ProductDetail extends Component {
         price: '1200',
         comments: [{
           user: {
-            avatarUrl: '',
-            name: ''
+            avatarUrl: 'https://randomuser.me/api/portraits/women/11.jpg',
+            name: 'Claudia Miranda'
           },
-          publicationDate: '',
-          comment: ''
+          publicationDate: '23-02-2018',
+          comment: 'Bastante buenas'
         }]
       }
     }
   }
 
-  componentWillMount() {}
-
   render() {
     return (
       <Container className={style.root}>
 
-        <Item.Group>
-          <Item className={style.item}>
-            <div className={style.imageRating}>
-              <Item.Image size="tiny" shape="circular" src={this.state.product.pictures
-                ? this.state.product.pictures[0].url
-                : ""}></Item.Image>
-              <StarRatingComponent name="rate1" starCount={5} value={this.state.product.rating}/>
-            </div>
-
-            <Item.Content className={style.itemContent}>
-              <Item.Header>{this.state.product.name}</Item.Header>
-              <Item.Meta className={style.itemMeta}>{this.state.user.name} {this.state.user.lastName}</Item.Meta>
-              <Item.Extra className={style.itemExtra}>{this.state.user.location.address}</Item.Extra>
-              <Item.Description>{this.state.product.description}</Item.Description>
-            </Item.Content>
-          </Item>
-        </Item.Group>
+        <EcProductDetailHeader
+          productImg={this.state.product.pictures[0].url}
+          productName={this.state.product.name}
+          userFullName={`${this.state.user.name} ${this.state.user.lastName}`}
+          userAddress={this.state.user.location.address}
+          productDescription={this.state.product.description}
+          productRating={this.state.product.rating}></EcProductDetailHeader>
 
         <Slider infinite={false} slidesToShow={3} slidesToScroll={1}>
           {this.state.product.pictures.length > 0 && this.state.product.pictures.map((pic, key) => {
@@ -77,21 +65,7 @@ export default class ProductDetail extends Component {
 
         <hr></hr>
 
-        <Comment.Group>
-          {this.state.product.comments.length > 0 && this.state.product.comments.map((comment, key) => {
-            return (
-              <Comment key={key}>
-                <Comment.Avatar src={comment.user.avatarUrl} className={style.commentAvatar}/>
-                <Comment.Content>
-                  <Comment.Author className={style.commentAuthor}>{comment.user.name}</Comment.Author>
-                  <Comment.Metadata>{comment.publicationDate}
-                  </Comment.Metadata>
-                  <Comment.Text>{comment.comment}</Comment.Text>
-                </Comment.Content>
-              </Comment>
-            )
-          })}
-        </Comment.Group>
+        <EcProductComments comments={this.state.product.comments}></EcProductComments>
       </Container>
     )
   }

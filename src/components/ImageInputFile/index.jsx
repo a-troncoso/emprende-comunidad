@@ -28,8 +28,7 @@ export default class ImageInputFile extends Component {
       pattern = /image-*/,
       reader = new FileReader()
 
-    if (!file)
-      return
+    if (!file) return
 
     if (!file.type.match(pattern)) {
       alert('Formato inválido')

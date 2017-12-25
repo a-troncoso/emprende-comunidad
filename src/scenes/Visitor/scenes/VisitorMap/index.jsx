@@ -4,18 +4,22 @@ import EcWantSellButton from './components/WantSellButton'
 
 export default class VisitorMap extends Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
 
   render() {
     return (<div>
       <EcMap onGoToProductDetail={() => {
           this.props.history.push('/visitor/product-view')
-        }}></EcMap>
-      <EcWantSellButton onWantBeSeller={() => {this.props.history.push('/visitor/register-stepper')}}></EcWantSellButton>
-    </div>);
+        }} onGoToUsersList={() => {
+          this.props.history.push('/visitor/users-list')
+        }} onGoToMap={() =>
+        {this.props.history.push('/visitor/map')}}></EcMap>
+      <EcWantSellButton onClick={() => {
+          this.props.history.push('/visitor/register-stepper')
+        }}></EcWantSellButton>
+    </div>)
   }
 }
 
-VisitorMap.propTypes = {
-};
+VisitorMap.propTypes = {}

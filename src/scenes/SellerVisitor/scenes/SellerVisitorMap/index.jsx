@@ -28,6 +28,10 @@ export default class SellerVisitorMap extends Component {
       {this.state.showImportantMessage && <EcImportantMessage onAccept={this.handleRegister} onCancel={this.handleCancel}></EcImportantMessage>}
       <EcMap onGoToProductDetail={() => {
           this.props.history.push('/seller-visitor/product-view')
+        }} onGoToUsersList={() => {
+          this.props.history.push('/seller-visitor/users-list')
+        }} onGoToMap={() => {
+          this.props.history.push('/seller-visitor/map')
         }}></EcMap>
       <EcRegisterButton onClick={this.handleRegister}></EcRegisterButton>
     </div>)

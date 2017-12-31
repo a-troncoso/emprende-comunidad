@@ -65,7 +65,6 @@ export default class Register extends Component {
   }
 
   handleAddSeller() {
-    // console.log(this.state)
     let seller = {
       id: Math.floor(Math.random() * 1000) + 1,
       image: `https://randomuser.me/api/portraits/thumb/women/${Math.floor(Math.random() * 100) + 1}.jpg`,

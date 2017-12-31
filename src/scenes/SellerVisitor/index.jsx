@@ -12,7 +12,7 @@ export default class SellerVisitor extends Component {
 
   render() {
     return (<div>
-      <Route path="/seller-visitor/map" exact component={EcSellerVisitorMap}/>
+      <Route path="/seller-visitor/map/:id" component={EcSellerVisitorMap}/>
       <Route path="/seller-visitor/register" exact component={EcRegister}/>
       <Route path="/seller-visitor/users-list" exact render={routeProps => <EcUsersList {...routeProps} onGoToProductDetail={() => {
             this.props.history.push('/seller-visitor/product-view')

@@ -9,22 +9,18 @@ export default class ImageInputFile extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      imageSrc: ''
-    }
-
     this.onFileChange = this.onFileChange.bind(this)
   }
 
   componentWillMount() {
-    this.setState({imageSrc: this.props.placeholder || defaultImagePic})
+    if (!this.props.value) {
+      this.props.onChangeImage(defaultImagePic)
+    }
   }
 
-  onFileChange(e, file) {
-    var file = file || (
-        e.target.files.length > 0
-        ? e.target.files[0]
-        : null),
+  onFileChange(e, _file) {
+    const file = _file || (
+        e.target.files.length > 0 ? e.target.files[0] : null),
       pattern = /image-*/,
       reader = new FileReader()
 
@@ -32,17 +28,15 @@ export default class ImageInputFile extends Component {
 
     if (!file.type.match(pattern)) {
       alert('Formato inválido')
+      // Aqui abrir modal con el mensaje formato no valido
       return
     }
 
     reader.onload = (e) => {
-      this.setState({
-        imageSrc: reader.result
-    })}
+      this.props.onChangeImage(reader.result)
+    }
 
     reader.readAsDataURL(file)
-    if (this.props.onChangeImage) this.props.onChangeImage()
-
   }
 
   render() {
@@ -51,14 +45,14 @@ export default class ImageInputFile extends Component {
       <div className={style.root}>
         <label className={style.label}>
           <input className={style.avatarFile} onChange={this.onFileChange} ref="upload" type="file" accept="image/*"/>
-          <Image className={style.avatarPic} alt="avatar_pic" src={this.state.imageSrc} size='small' shape={shape}/>
+          <Image className={style.avatarPic} alt="avatar_pic" src={this.props.value} size='small' shape={shape}/>
         </label>
       </div>)
   }
 }
 
 ImageInputFile.propTypes = {
+  value: PropTypes.string.isRequired,
   shape: PropTypes.string,
-  placeholder: PropTypes.string,
   onChangeImage: PropTypes.func
 }

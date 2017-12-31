@@ -9,20 +9,6 @@ import style from './AddProducts.scss'
 export default class AddProducts extends Component {
   constructor(props) {
     super(props)
-
-    this.state = {
-      product: {
-        images: [{}]
-      }
-    }
-
-    this.handleChangeProductImage = this.handleChangeProductImage.bind(this)
-  }
-
-  handleChangeProductImage () {
-    const product = Object.assign({}, this.state.product)
-    product.images = product.images.concat([{}])
-    this.setState({product})
   }
 
   render() {
@@ -45,13 +31,13 @@ export default class AddProducts extends Component {
         <Form.Field>
           <label>Fotos</label>
           <div className={style.productsImages}>
-            {this.props.productsData[0].images && this.props.productsData[0].images.map((image, key) => {
+            {this.props.productsData[0].pictures && this.props.productsData[0].pictures.map((image, key) => {
               return (
                 <EcImageInputFile
                   key={key}
                   className={style.imageInputFile}
-                  name="pictures"
-                  onChangeImage={() => this.props.onUpdateProductsData()}></EcImageInputFile>
+                  value={image}
+                  onChangeImage={(image) => this.props.onUpdateProductsData({target:{name:'pictures',value:image}})}></EcImageInputFile>
               )
             }).reverse()}
           </div>

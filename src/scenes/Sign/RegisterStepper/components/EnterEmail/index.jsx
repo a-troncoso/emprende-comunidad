@@ -10,7 +10,13 @@ export default class EnterEmail extends React.Component {
   render() {
     return (<div>
       <Form>
-        <Form.Input label="Email" type="email" name="email" value={this.props.email} onChange={this.props.onUpdateEmail} placeholder="correo@ejemplo.com"/>
+        <Form.Input
+          label="Email"
+          type="email"
+          name="email"
+          value={this.props.email}
+          onChange={this.props.onUpdateEmail}
+          placeholder="correo@ejemplo.com"/>
       </Form>
     </div>)
   }

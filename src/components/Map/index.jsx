@@ -37,14 +37,17 @@ export default class Map extends Component {
   handleUserAdded() {
     // firebase.databse().ref() -> referencia a la base de datos
     const messageRef = firebase.database().ref().child('users')
-    let users = []
+    let {users} = this.state, newUser = {}
     // child_added -> evento q se ejecuta cada vez q se agrega algo a la bd
     // snapshot -> captura de la bd en ese momento
     // napshot.val() -> valor q contiene snapshot
     messageRef.on('child_added', snapshot => {
       console.info('new user ->', snapshot.val())
-      users = users.concat(snapshot.val())
-      this.setState({users})
+      newUser = snapshot.val()
+      if (newUser.active) {
+        users = users.concat(snapshot.val())
+        this.setState({users})
+      }
     })
   }
 

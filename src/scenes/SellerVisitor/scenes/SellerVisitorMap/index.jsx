@@ -21,19 +21,15 @@ export default class SellerVisitorMap extends Component {
   }
 
   validateSellerVisitorUser() {
-    console.log(this.props.match.params.id)
     const userSellerId = this.props.match.params.id
 
-    const usersRef = firebase.database().ref().child('users').child(userSellerId)
-    usersRef.update({
+    firebase.database().ref(`users/${userSellerId}`).update({
       active: true,
       location: {
-        "address": "Diagonal Paraguay con Vicuña Mackena",
-        "lat": -33.4315604,
-        "lng": -70.6855855
+        lat: 0,
+        lng: 0
       }
     })
-
   }
 
   handleRegister() {
@@ -45,9 +41,10 @@ export default class SellerVisitorMap extends Component {
   }
 
   render() {
+    const userSellerId = this.props.match.params.id
     return (<div>
       {this.state.showImportantMessage && <EcImportantMessage onAccept={this.handleRegister} onCancel={this.handleCancel}></EcImportantMessage>}
-      <EcMap onGoToProductDetail={() => {
+      <EcMap profile='seller-visitor' userId={userSellerId}  onGoToProductDetail={() => {
           this.props.history.push('/seller-visitor/product-view')
         }} onGoToUsersList={() => {
           this.props.history.push('/seller-visitor/users-list')

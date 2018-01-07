@@ -12,6 +12,10 @@ export default class ProductMarkers extends Component {
     super(props)
   }
 
+  componentWillMount() {
+    console.log(this.props.products)
+  }
+
   render() {
     return (
       <div className={style.root}>

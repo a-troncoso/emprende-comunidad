@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import {PropTypes} from 'prop-types'
 import classNames from 'classnames'
 import {Image} from 'semantic-ui-react'
-
 import EcProductMarkers from '../ProductMarkers'
+import defaultAvatarPic from '@/assets/images/default-avatar.png'
 
 import style from './Marker.scss'
 
@@ -52,6 +52,10 @@ export default class Marker extends Component {
   }
 
   render() {
+    const srcUserImage = this.props.user.image || defaultAvatarPic
+    // Si es de tipo "own" (indica si el marcador es de tipo user-seller) se muestra con color celeste
+    const markerClasses = this.props.type === 'own' ? [style.markerPin, style.markerPinOwn, style.markerBounce] : [style.markerPin, style.markerBounce]
+
     return (
       <div ref={node => {
         this.node = node
@@ -60,8 +64,8 @@ export default class Marker extends Component {
         {this.state.showProductMarkers && this.props.user.products.length > 0 && (
           <EcProductMarkers onGoToProductDetail={this.props.onGoToProductDetail} products={this.props.user.products} user={this.props.user}></EcProductMarkers>
         )}
-        <div className={[style.markerPin, style.markerBounce].join(' ')} onClick={this.onClickMarker}>
-          <img src={this.props.user.image} className={style.markerImage}></img>
+        <div className={markerClasses.join(' ')} onClick={this.onClickMarker}>
+          <img src={srcUserImage} className={style.markerImage}></img>
         </div>
       </div>
     )
@@ -70,5 +74,6 @@ export default class Marker extends Component {
 
 Marker.propTypes = {
   user: PropTypes.object,
-  onGoToProductDetail: PropTypes.func.isRequired
+  onGoToProductDetail: PropTypes.func.isRequired,
+  type: PropTypes.string
 }

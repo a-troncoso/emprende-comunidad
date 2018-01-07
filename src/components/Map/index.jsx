@@ -19,9 +19,10 @@ export default class Map extends Component {
         lat: 0,
         lng: 0
       },
-      ownPosition: {
+      ownMarker: {
         lat: 0,
-        lng: 0
+        lng: 0,
+        user: null
       },
       zoom: 17,
       showMap: false,
@@ -32,21 +33,25 @@ export default class Map extends Component {
   componentWillMount() {
     this.handleGetCenterMapPosition()
     this.handleUserAdded()
+
   }
 
   handleUserAdded() {
-    // firebase.databse().ref() -> referencia a la base de datos
-    const messageRef = firebase.database().ref().child('users')
-    let {users} = this.state, newUser = {}
-    // child_added -> evento q se ejecuta cada vez q se agrega algo a la bd
-    // snapshot -> captura de la bd en ese momento
-    // napshot.val() -> valor q contiene snapshot
-    messageRef.on('child_added', snapshot => {
-      console.info('new user ->', snapshot.val())
-      newUser = snapshot.val()
-      if (newUser.active) {
+    let {users} = this.state, {ownMarker} = this.state
+    const usersRef = firebase.database().ref().child('users')
+    const userSellerId = this.props.userId
+
+    usersRef.on('child_added', snapshot => {
+      console.info('KEY ->', snapshot.key)
+
+      // Si el id usuario que se está consultando de la lista de usuarios es distinto del id usuario vendedor-visitante
+      // Se agrega a la lista de usuarios
+      if (snapshot.key !== userSellerId) {
         users = users.concat(snapshot.val())
         this.setState({users})
+      } else {
+        ownMarker.user = snapshot.val()
+        this.setState({ownMarker})
       }
     })
   }
@@ -68,18 +73,17 @@ export default class Map extends Component {
 
   handleGetCurrentPosition() {
     const geolocation = navigator.geolocation
-    let watchId = null
+    let watchId = null, {ownMarker} = this.state
 
     if (!geolocation) {
       reject(new Error('Geolocation not supported'))
     }
 
     watchId = geolocation.watchPosition(position => {
+      ownMarker.lat = position.coords.latitude
+      ownMarker.lng = position.coords.longitude
       this.setState({
-        ownPosition: {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        },
+        ownMarker,
         showMap: true
       })
     }, () => {
@@ -106,10 +110,33 @@ export default class Map extends Component {
               key: 'AIzaSyC0FT8GbyxW9iqYx65r0ibCUpY78sjrRhs',
               language: 'es'
             }} center={this.state.center} defaultZoom={this.state.zoom}>
-            <EcOwnMarker lat={this.state.ownPosition.lat} lng={this.state.ownPosition.lng}></EcOwnMarker>
+              {/* Si se ingresa al mapa con perfil seller-visitor y se ha establecido la data del usuario vendedor
+                (seteada en la func "handleUserAdded") */}
+              { (this.props.profile == 'seller-visitor' && this.state.ownMarker.user) ? (
+                <EcMarker
+                  lat={this.state.ownMarker.lat}
+                  lng={this.state.ownMarker.lng}
+                  onGoToProductDetail={this.props.onGoToProductDetail}
+                  user={this.state.ownMarker.user}
+                  type="own"></EcMarker>
+
+              ) : (
+                <EcOwnMarker
+                  lat={this.state.ownMarker.lat}
+                  lng={this.state.ownMarker.lng}></EcOwnMarker>
+              )
+              }
             {
               this.state.users.map((user, key) => {
-                return (<EcMarker lat={user.location.lat} lng={user.location.lng} onGoToProductDetail={this.props.onGoToProductDetail} user={user} key={key}></EcMarker>)
+                return (
+                  <EcMarker
+                    key={key}
+                    lat={user.location.lat}
+                    lng={user.location.lng}
+                    onGoToProductDetail={this.props.onGoToProductDetail}
+                    user={user}
+                    ></EcMarker>
+                )
               })
             }
           </GoogleMapReact>
@@ -122,4 +149,6 @@ Map.propTypes = {
   onGoToProductDetail: PropTypes.func.isRequired,
   onGoToUsersList: PropTypes.func.isRequired,
   onGoToMap: PropTypes.func.isRequired,
+  profile: PropTypes.string,
+  userId: PropTypes.string
 }

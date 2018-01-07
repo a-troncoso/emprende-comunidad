@@ -33,7 +33,7 @@ export default class ImageInputFile extends Component {
     }
 
     reader.onload = (e) => {
-      this.props.onChangeImage(reader.result)
+      this.props.onChangeImage(reader.result, file)
     }
 
     reader.readAsDataURL(file)

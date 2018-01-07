@@ -1,23 +1,24 @@
+@import '~sass/variables/colors.scss';
+
 .marker {
   &Pin {
     width: 30px;
     height: 30px;
     border-radius: 50% 50% 50% 0;
-    background: #8ad322;
+    background-color: $primary-color;
     position: absolute;
     transform: rotate(-45deg);
     left: 50%;
     top: 50%;
     margin: -20px 0 0 -20px;
-    // &:after {
-    //   content: "";
-      // width: 28px;
-      // height: 28px;
-      // margin: 1px 1px 1px 1px;
-      // background: #e6e6e6;
-      // position: absolute;
-      // border-radius: 50%;
-    // }
+    &Own {
+      background-color: #00a6cd;
+    }
+  }
+  &Bounce {
+    animation-name: bounce;
+    animation-fill-mode: both;
+    animation-duration: 1s;
   }
   &Image {
     position: absolute;
@@ -28,13 +29,6 @@
     border-radius: 50%;
     transform: rotate(-315deg);
   }
-
-  &Bounce {
-    animation-name: bounce;
-    animation-fill-mode: both;
-    animation-duration: 1s;
-  }
-
   &Pulse {
     background: #d6d4d4;
     border-radius: 50%;
@@ -56,7 +50,7 @@
       animation: pulsate 1s ease-out;
       animation-iteration-count: infinite;
       opacity: 0;
-      box-shadow: 0 0 1px 2px #8ad322;
+      box-shadow: 0 0 1px 2px $primary-color;
       animation-delay: 1.1s;
     }
   }

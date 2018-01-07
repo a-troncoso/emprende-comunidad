@@ -6,7 +6,6 @@ import EcEnterEmail from './components/EnterEmail'
 import EcConfirm from './components/Confirm'
 import {Container, Button} from 'semantic-ui-react'
 import style from './RegisterStepper.scss'
-import defaultImagePic from '@/assets/images/default-image.png'
 
 export default class RegisterStepper extends Component {
   constructor(props) {
@@ -21,7 +20,9 @@ export default class RegisterStepper extends Component {
         products: [{
           name: '',
           description: '',
-          pictures: [defaultImagePic]
+          pictures: [],
+          image: '',
+          temporaryPictures: []
         }]
       },
       steps: [
@@ -53,18 +54,52 @@ export default class RegisterStepper extends Component {
     }
   }
 
-  saveSellerVisitorUser() {
+  async saveSellerVisitorUser() {
+    await this.uploadProductImages()
+    // Si se han subido todas las imágenes del producto
+    if (this.state.user.products[0].temporaryPictures.length < this.state.user.products[0].pictures.length) { return }
+
     let {user} = this.state
 
-    // Quita la primera imagagen correspondientes a la default imagen pic
-    user.products[0].pictures = user.products[0].pictures.filter((pic, idx) => {return idx > 0})
-
-    console.log(user)
-
-    //Agregar usuario seller a firebase
+    // Agregar usuario seller a firebase
     const usersRef = firebase.database().ref().child('users')
     const userID = usersRef.push()
-    userID.set(user)
+    userID.set(this.formatUserData(user))
+  }
+
+  async uploadProductImages() {
+    let extension = '', fileName = '', storageRef = {}, productImagesRef = {}, currentFile
+    const that = this, {user} = this.state
+
+    for (var i = 0; i < this.state.user.products[0].temporaryPictures.length; i++) {
+      currentFile = this.state.user.products[0].temporaryPictures[i].file
+      extension = currentFile.type.split('/')[1]
+      fileName = `${currentFile.lastModified}.${extension}`
+      storageRef = firebase.storage().ref()
+      productImagesRef = storageRef.child('productImages').child(fileName)
+
+      // Espera la respuesta de la subida de la imagen
+      let response = await productImagesRef.put(currentFile)
+      user.products[0].pictures.push({
+        url: response.metadata.downloadURLs[0]
+      })
+      that.setState({ user }, async () => response)
+    }
+  }
+
+  formatUserData(data) {
+    return {
+        id: this.state.user.id,
+        active: this.state.user.active,
+        email: this.state.user.email,
+        profile: this.state.user.profile,
+        products: [{
+          name: this.state.user.products[0].name,
+          description: this.state.user.products[0].description,
+          image: this.state.user.products[0].pictures[0].url, // La 1era imagen
+          pictures: this.state.user.products[0].pictures.slice(1) // desde la 2da imagen
+        }]
+    }
   }
 
   handleUpdateRegisterData(event) {
@@ -77,7 +112,10 @@ export default class RegisterStepper extends Component {
     // Por ahora sólo se agrega un producto
     // por si es imagen lo q se sta agregando
     if (name === 'pictures') {
-      user.products[0].pictures = user.products[0].pictures.concat(value)
+      user.products[0].temporaryPictures = user.products[0].temporaryPictures.concat({
+        base64: value,
+        file: target.file
+      })
     } else if (name === 'email') {
       user.email = value
     } else {

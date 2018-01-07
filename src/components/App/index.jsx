@@ -11,7 +11,7 @@ firebase.initializeApp({
   authDomain: 'emprende-comunid-1509237222922.firebaseapp.com',
   databaseURL: 'https://emprende-comunid-1509237222922.firebaseio.com',
   projectId: 'emprende-comunid-1509237222922',
-  storageBucket: '',
+  storageBucket: 'emprende-comunid-1509237222922.appspot.com',
   messagingSenderId: '166586638373'
 });
 

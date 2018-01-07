@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import EcImageInputFile from '@/components/ImageInputFile'
-import {Form, Button, TextArea} from 'semantic-ui-react'
+import {Form, Button, TextArea, Image} from 'semantic-ui-react'
 
-import defaultImagePic from '@/assets/images/default-image.png'
+import defaultAddImagePic from '@/assets/images/default-add-image.png'
 import style from './AddProducts.scss'
 
 export default class AddProducts extends Component {
@@ -31,15 +31,20 @@ export default class AddProducts extends Component {
         <Form.Field>
           <label>Fotos</label>
           <div className={style.productsImages}>
-            {this.props.productsData[0].pictures && this.props.productsData[0].pictures.map((image, key) => {
+            <EcImageInputFile
+              value={defaultAddImagePic}
+              onChangeImage={(base64Image, file) => this.props.onUpdateProductsData({
+                target: {
+                  name: 'pictures',
+                  value: base64Image,
+                  file
+                }
+              })}></EcImageInputFile>
+            {this.props.productsData[0].temporaryPictures && this.props.productsData[0].temporaryPictures.map((picture, key) => {
               return (
-                <EcImageInputFile
-                  key={key}
-                  className={style.imageInputFile}
-                  value={image}
-                  onChangeImage={(image) => this.props.onUpdateProductsData({target:{name:'pictures',value:image}})}></EcImageInputFile>
+                <Image alt="picture_pic" src={picture.base64} size='small' key={key}/>
               )
-            }).reverse()}
+            })}
           </div>
         </Form.Field>
       </Form>

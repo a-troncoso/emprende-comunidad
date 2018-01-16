@@ -1,9 +1,11 @@
 {
   "hosting": {
     "public": "build",
-    "rewrites": [{
-      "source": "/seller",
-      "destination":"/index.html"
-    }]
+    "rewrites": [
+      {
+        "source": "/seller",
+        "destination": "/index.html"
+      }
+    ]
   }
 }

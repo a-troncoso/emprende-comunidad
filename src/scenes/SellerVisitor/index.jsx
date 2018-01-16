@@ -15,14 +15,14 @@ export default class SellerVisitor extends Component {
       <Route path="/seller-visitor/:id/map" component={EcSellerVisitorMap}/>
       <Route path="/seller-visitor/register" exact component={EcRegister}/>
       <Route path="/seller-visitor/users-list" exact render={routeProps => <EcUsersList {...routeProps} onGoToProductDetail={() => {
-            this.props.history.push('/seller-visitor/product-view')
+            this.props.history.push('/seller-visitor/:id/product-view/:product-id')
           }} onGoToUsersList={() =>
           {this.props.history.push('/seller-visitor/users-list')}} onGoToMap={
             () => {
               this.props.history.push('/seller-visitor/map')
             }
           }/>}/>
-      <Route path="/seller-visitor/product-view" exact component={EcProductDetail}/>
+        <Route path="/seller-visitor/:id/product-view/:productUid" component={EcProductDetail}/>
     </div>)
   }
 }

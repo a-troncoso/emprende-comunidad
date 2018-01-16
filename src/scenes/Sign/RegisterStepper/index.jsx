@@ -13,7 +13,6 @@ export default class RegisterStepper extends Component {
 
     this.state = {
       user: {
-        id: Math.floor(Math.random() * 1000) + 1,
         active: false,
         email: '',
         profile: 2,
@@ -21,7 +20,7 @@ export default class RegisterStepper extends Component {
           name: '',
           description: '',
           pictures: [],
-          image: '',
+          pictureUrl: '',
           temporaryPictures: []
         }]
       },
@@ -41,11 +40,15 @@ export default class RegisterStepper extends Component {
     this.handleUpdateRegisterData = this.handleUpdateRegisterData.bind(this)
   }
 
+  componentWillMount() { }
+
   onClickNext() {
-    const {steps, currentStep} = this.state
-    this.setState({
-      currentStep: currentStep + 1
-    }, () => this.checkCurrentStep())
+    const {currentStep} = this.state
+    if (currentStep === 1) {
+      this.saveSellerVisitorUser()
+    } else {
+      this.setState({ currentStep: currentStep + 1 })
+    }
   }
 
   checkCurrentStep() {
@@ -55,16 +58,20 @@ export default class RegisterStepper extends Component {
   }
 
   async saveSellerVisitorUser() {
+    // Espera la subida de imagenes
     await this.uploadProductImages()
     // Si se han subido todas las imágenes del producto
     if (this.state.user.products[0].temporaryPictures.length < this.state.user.products[0].pictures.length) { return }
 
-    let {user} = this.state
+    const saveProductsResponse = await this.saveProducts()
+
+    const {user,currentStep} = this.state
 
     // Agregar usuario seller a firebase
     const usersRef = firebase.database().ref().child('users')
     const userID = usersRef.push()
-    userID.set(this.formatUserData(user))
+    await userID.set(this.formatUserData(user, saveProductsResponse.key))
+    this.setState({ currentStep: currentStep + 1 })
   }
 
   async uploadProductImages() {
@@ -80,33 +87,50 @@ export default class RegisterStepper extends Component {
 
       // Espera la respuesta de la subida de la imagen
       let response = await productImagesRef.put(currentFile)
-      user.products[0].pictures.push({
-        url: response.metadata.downloadURLs[0]
-      })
+      if (i === 0) {
+        // La primera imagen queda guardada en pictureUrl
+        user.products[0].pictureUrl = response.metadata.downloadURLs[0]
+      } else {
+        // Las otras imagenes quedan guardadas en el aray
+        user.products[0].pictures.push({ url: response.metadata.downloadURLs[0] })
+      }
       that.setState({ user }, async () => response)
     }
   }
 
-  formatUserData(data) {
+  async saveProducts() {
+    // Agregar usuario seller a firebase
+    const productsRef = firebase.database().ref().child('products')
+    const productID = productsRef.push()
+    productID.set(this.formatProductData(this.state.user.products[0]))
+    return productID
+  }
+
+  formatProductData(data) {
     return {
-        id: this.state.user.id,
-        active: this.state.user.active,
-        email: this.state.user.email,
-        profile: this.state.user.profile,
-        products: [{
-          name: this.state.user.products[0].name,
-          description: this.state.user.products[0].description,
-          image: this.state.user.products[0].pictures[0].url, // La 1era imagen
-          pictures: this.state.user.products[0].pictures.slice(1) // desde la 2da imagen
-        }]
+      name: data.name,
+      description: data.description,
+      pictures: data.pictures,
+      pictureUrl: data.pictureUrl
     }
+  }
+
+  formatUserData(userData, productKey) {
+    let formattedData = {
+      id: userData.id,
+      active: userData.active,
+      email: userData.email,
+      profile: userData.profile,
+      products: {}
+    }
+    formattedData.products[productKey] =  true
+    return formattedData
   }
 
   handleUpdateRegisterData(event) {
     const target = event.target
     const value = target.value
     const name = target.name
-
     const {user} = this.state
 
     // Por ahora sólo se agrega un producto
@@ -122,9 +146,7 @@ export default class RegisterStepper extends Component {
       user.products[0][name] = value
     }
 
-    this.setState({
-      user
-    })
+    this.setState({ user })
   }
 
   render() {

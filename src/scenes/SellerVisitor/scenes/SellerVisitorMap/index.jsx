@@ -24,11 +24,7 @@ export default class SellerVisitorMap extends Component {
     const userSellerId = this.props.match.params.id
 
     firebase.database().ref(`users/${userSellerId}`).update({
-      active: true,
-      location: {
-        lat: 0,
-        lng: 0
-      }
+      active: true
     })
   }
 
@@ -43,9 +39,11 @@ export default class SellerVisitorMap extends Component {
   render() {
     const userSellerId = this.props.match.params.id
     return (<div>
-      {this.state.showImportantMessage && <EcImportantMessage onAccept={this.handleRegister} onCancel={this.handleCancel}></EcImportantMessage>}
-      <EcMap profile='seller-visitor' userId={userSellerId}  onGoToProductDetail={() => {
-          this.props.history.push('/seller-visitor/product-view')
+      {
+        this.state.showImportantMessage && <EcImportantMessage onAccept={this.handleRegister} onCancel={this.handleCancel}></EcImportantMessage>
+      }
+      <EcMap profile='seller-visitor' userId={userSellerId}  onGoToProductDetail={productUid => {
+          this.props.history.push(`/seller-visitor/${userSellerId}/product-view/${productUid}`)
         }} onGoToUsersList={() => {
           this.props.history.push('/seller-visitor/users-list')
         }} onGoToMap={() => {

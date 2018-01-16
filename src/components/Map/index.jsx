@@ -33,29 +33,54 @@ export default class Map extends Component {
   componentWillMount() {
     this.handleGetCenterMapPosition()
     this.handleUserAdded()
-
   }
 
+  /*
+    Funcion que obtiene los usuarios
+  */
   handleUserAdded() {
     let {users} = this.state, {ownMarker} = this.state
     const usersRef = firebase.database().ref().child('users')
     const userSellerId = this.props.userId
 
-    usersRef.on('child_added', snapshot => {
-      console.info('KEY ->', snapshot.key)
-
-      // Si el id usuario que se está consultando de la lista de usuarios es distinto del id usuario vendedor-visitante
-      // Se agrega a la lista de usuarios
+    usersRef.on('child_added', async (snapshot) => {
+      /*
+        Si el id usuario que se está consultando de la lista de usuarios
+        es distinto del id usuario vendedor-visitante
+        Se agrega a la lista de usuarios
+      */
+      let user = snapshot.val()
+      let products = await this.getUserProducts(user)
+      user.products = products
       if (snapshot.key !== userSellerId) {
-        users = users.concat(snapshot.val())
+        users = users.concat(user)
         this.setState({users})
       } else {
-        ownMarker.user = snapshot.val()
+        ownMarker.user = user
         this.setState({ownMarker})
       }
     })
   }
 
+  /*
+    Funcion que obtiene los productos de un usuario
+  */
+  async getUserProducts(user) {
+    let productKeys = user.products, products = [], snapshot = {}, snapshotVal = {}
+    for (let productKey in productKeys) {
+      if (productKeys.hasOwnProperty(productKey) && productKeys[productKey]) {
+        snapshot = await firebase.database().ref('products/' + productKey).once('value')
+        snapshotVal = snapshot.val()
+        snapshotVal.uid = productKey
+        products = products.concat(snapshotVal)
+      }
+    }
+    return products
+  }
+
+  /*
+    Funcion que obtiene la localizacion actual y la establece como centro del mapa
+  */
   handleGetCenterMapPosition() {
     geolocationService.getGeolocation().then(success => {
       this.setState({
@@ -64,7 +89,6 @@ export default class Map extends Component {
           lng: success.coords.longitude
         }
       })
-
       this.handleGetCurrentPosition()
     }).catch(error => {
       throw error
@@ -86,12 +110,24 @@ export default class Map extends Component {
         ownMarker,
         showMap: true
       })
+      this.updateUserPosition(ownMarker.lat, ownMarker.lng)
     }, () => {
       throw 'An error has ocurred with geolocation'
     }, {
       enableHighAccuracy: true,
       maximumAge: 30000,
       timeout: 27000
+    })
+  }
+
+  updateUserPosition(lat, lng) {
+    const userSellerId = this.props.userId
+
+    firebase.database().ref(`users/${userSellerId}`).update({
+      location: {
+        lat,
+        lng
+      }
     })
   }
 
@@ -110,20 +146,18 @@ export default class Map extends Component {
               key: 'AIzaSyC0FT8GbyxW9iqYx65r0ibCUpY78sjrRhs',
               language: 'es'
             }} center={this.state.center} defaultZoom={this.state.zoom}>
-              {/* Si se ingresa al mapa con perfil seller-visitor y se ha establecido la data del usuario vendedor
+              {/* Si se ingresa al mapa con perfil seller-visitor
+                y se ha establecido la data del usuario vendedor
                 (seteada en la func "handleUserAdded") */}
               { (this.props.profile == 'seller-visitor' && this.state.ownMarker.user) ? (
                 <EcMarker
                   lat={this.state.ownMarker.lat}
                   lng={this.state.ownMarker.lng}
-                  onGoToProductDetail={this.props.onGoToProductDetail}
+                  onGoToProductDetail={productUid => this.props.onGoToProductDetail(productUid)}
                   user={this.state.ownMarker.user}
                   type="own"></EcMarker>
-
               ) : (
-                <EcOwnMarker
-                  lat={this.state.ownMarker.lat}
-                  lng={this.state.ownMarker.lng}></EcOwnMarker>
+                <EcOwnMarker lat={this.state.ownMarker.lat} lng={this.state.ownMarker.lng}></EcOwnMarker>
               )
               }
             {

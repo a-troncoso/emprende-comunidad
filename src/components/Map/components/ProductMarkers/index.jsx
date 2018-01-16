@@ -13,7 +13,6 @@ export default class ProductMarkers extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.products)
   }
 
   render() {
@@ -22,9 +21,7 @@ export default class ProductMarkers extends Component {
         {this.props.user.products.map((product, key) => {
           return (
             <div className={style.product} key={key}>
-              {/*<Link to={{ pathname: `app/product-view`, state: { user: this.props.user, product } }}>*/}
-                <Image onClick={this.props.onGoToProductDetail} src={product.image} shape="circular"></Image>
-              {/*</Link>*/}
+              <Image onClick={() => this.props.onGoToProductDetail(product.uid)} src={product.pictureUrl} shape="circular"></Image>
             </div>
           )
         })}

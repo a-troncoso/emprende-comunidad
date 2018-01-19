@@ -18,9 +18,9 @@ export default class ProductDetail extends Component {
 
     this.state = {
       user: {
-        name: 'Juana',
-        lastName: 'Machuca',
-        location: { address: 'Villa Los Alerces #2214' }
+        name: '',
+        lastName: '',
+        location: { address: '' }
       }
       // product: {
       //   pictureUrl: 'https://www.arcuma.com/dr.cannabis/pics/temp-0000-cnbc.jpg',
@@ -61,6 +61,7 @@ export default class ProductDetail extends Component {
     product.pictureUrl = snapshotVal.pictureUrl
     product.name = snapshotVal.name
     product.description = snapshotVal.description
+    product.pictures = snapshotVal.pictures
     this.setState({product}, () => console.log(this.state))
   }
 
@@ -71,7 +72,8 @@ export default class ProductDetail extends Component {
           this.state.product && <EcProductDetailHeader
           productImg={this.state.product.pictureUrl}
           productName={this.state.product.name}
-          userFullName={`${this.state.user.name} ${this.state.user.lastName}`}
+          userName={this.state.user.name}
+          userLastName={this.state.user.lastName}
           userAddress={this.state.user.location.address}
           productDescription={this.state.product.description}
           productRating={this.state.product.rating}></EcProductDetailHeader>
@@ -90,13 +92,11 @@ export default class ProductDetail extends Component {
           </Slider>
         }
         {
-          this.state.product && <h2 className={style.price}>$ {this.state.product.price}</h2>
+          this.state.product && this.state.product.price && <h2 className={style.price}>$ {this.state.product.price}</h2>
         }
 
-        <hr></hr>
-
         {
-          this.state.product && this.state.product.comments && <EcProductComments comments={this.state.product.comments}></EcProductComments>
+          this.state.product && this.state.product.comments && <hr></hr> && <EcProductComments comments={this.state.product.comments}></EcProductComments>
         }
       </Container>
     )

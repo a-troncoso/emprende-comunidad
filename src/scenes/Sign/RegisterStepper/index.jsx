@@ -58,6 +58,11 @@ export default class RegisterStepper extends Component {
   }
 
   async saveSellerVisitorUser() {
+    const productValid = this.validateProductData()
+    if (!productValid) {
+      console.log('Validaciones fallidas')
+      return
+    }
     // Espera la subida de imagenes
     await this.uploadProductImages()
     // Si se han subido todas las imágenes del producto
@@ -117,7 +122,6 @@ export default class RegisterStepper extends Component {
 
   formatUserData(userData, productKey) {
     let formattedData = {
-      id: userData.id,
       active: userData.active,
       email: userData.email,
       profile: userData.profile,
@@ -147,6 +151,12 @@ export default class RegisterStepper extends Component {
     }
 
     this.setState({ user })
+  }
+
+  validateProductData() {
+    return this.state.user.email !== '' &&
+      this.state.user.products[0].description !== ''  &&
+      this.state.user.products[0].temporaryPictures.length >= 3
   }
 
   render() {

@@ -15,6 +15,7 @@ import {
 import StarRatingComponent from 'react-star-rating-component'
 import {Link} from 'react-router-dom'
 import firebase from 'firebase'
+import defaultAvatarPic from '@/assets/images/default-avatar.png'
 
 import style from './UsersList.scss'
 
@@ -44,64 +45,88 @@ export default class UsersList extends Component {
   }
 
   handleUserAdded() {
-    const messageRef = firebase.database().ref().child('users')
-      let users = [],
-        user = {}
-      messageRef.on('child_added', snapshot => {
-        user = snapshot.val()
-        user.showProducts = false
-        users = users.concat(user)
-        this.setState({users})
-      })
-    }
+    const usersRef = firebase.database().ref().child('users')
+    let users = [],
+      products = []
 
-    handleGoToRoute(params) {
-      this.props.history.push({
-        pathname: `/app/product-view`,
-        state: params
-      })
-    }
-
-    render() {
-      return (<Container className={style.root}>
-        <Segment vertical>
-          <List divided relaxed="very" selection verticalAlign='middle' size="large">
-            {
-              this.state.users.map((user, key) => {
-                return (<List.Item onClick={() => this.onShowProducts(user.id)} key={key}>
-                  <Image avatar src={user.image}/>
-                  <List.Content>
-                    <List.Header>{user.name} {user.lastName}</List.Header>
-                  </List.Content>
-                  {
-                    user.showProducts && <List divided  verticalAlign='middle'>
-                        {
-                          user.products.map((product, key) => {
-                            return (<List.Item onClick={this.props.onGoToProductDetail} key={key}>
-                              <Image avatar src={product.image}/>
-                              <List.Content>
-                                <List.Header>{product.name}</List.Header>
-                              </List.Content>
-                            </List.Item>)
-                          })
-                        }</List>
-                  }</List.Item>)
-              })
-            }
-          </List>
-        </Segment>
-        <Menu effect="zoomin" method="hover" position="bl">
-          <MainButton iconResting="ion-ios-eye" iconActive="ion-ios-eye-outline"/>
-          <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={this.props.onGoToMap}/>
-          <ChildButton icon="ion-android-list" label="Ver lista" onClick={this.props.onGoToUsersList}/>
-        </Menu>
-      </Container>)
-    }
-
+    usersRef.on('child_added', async (snapshot) => {
+      let user = snapshot.val()
+      products = await this.getUserProducts(user)
+      user.products = products
+      user.showProducts = false
+      users = users.concat(user)
+      this.setState({users})
+    })
   }
 
-  UsersList.propTypes = {
-    onGoToProductDetail: PropTypes.func.isRequired,
-    onGoToUsersList: PropTypes.func.isRequired,
-    onGoToMap: PropTypes.func.isRequired,
+  handleGoToRoute(params) {
+    this.props.history.push({
+      pathname: `/app/product-view`,
+      state: params
+    })
   }
+
+  /*
+    Funcion que obtiene los productos de un usuario
+  */
+  async getUserProducts(user) {
+    let productKeys = user.products, products = [], snapshot = {}, snapshotVal = {}
+    for (let productKey in productKeys) {
+      if (productKeys.hasOwnProperty(productKey) && productKeys[productKey]) {
+        snapshot = await firebase.database().ref('products/' + productKey).once('value')
+        snapshotVal = snapshot.val()
+        snapshotVal.uid = productKey
+        products = products.concat(snapshotVal)
+      }
+    }
+    return products
+  }
+
+  render() {
+    let srcUserImage = '',
+      userFullName = ''
+
+    return (<Container className={style.root}>
+      <Segment vertical>
+        <List divided relaxed="very" selection verticalAlign='middle' size="large">
+          {
+            this.state.users.map((user, key) => {
+              srcUserImage = user.image || defaultAvatarPic
+              userFullName = (!user.name && !user.lastName) ? 'Usuario anónimo' : `${user.name} ${user.lastName}`
+              return (<List.Item onClick={() => this.onShowProducts(user.id)} key={key}>
+                <Image avatar src={srcUserImage}/>
+                <List.Content>
+                  <List.Header>{userFullName}</List.Header>
+                </List.Content>
+                {
+                  user.showProducts && <List divided verticalAlign='middle'>
+                      {
+                        user.products.map((product, key) => {
+                          return (<List.Item onClick={this.props.onGoToProductDetail} key={key}>
+                            <Image avatar src={product.pictureUrl}/>
+                            <List.Content>
+                              <List.Header>{product.name}</List.Header>
+                            </List.Content>
+                          </List.Item>)
+                        })
+                      }</List>
+                }</List.Item>)
+            })
+          }
+        </List>
+      </Segment>
+      <Menu effect="zoomin" method="hover" position="bl">
+        <MainButton iconResting="ion-ios-eye" iconActive="ion-ios-eye-outline"/>
+        <ChildButton icon="ion-ios-navigate" label="Ver mapa" onClick={this.props.onGoToMap}/>
+        <ChildButton icon="ion-android-list" label="Ver lista" onClick={this.props.onGoToUsersList}/>
+      </Menu>
+    </Container>)
+  }
+
+}
+
+UsersList.propTypes = {
+  onGoToProductDetail: PropTypes.func.isRequired,
+  onGoToUsersList: PropTypes.func.isRequired,
+  onGoToMap: PropTypes.func.isRequired,
+}

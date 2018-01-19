@@ -28,6 +28,8 @@ export default class Map extends Component {
       showMap: false,
       users: []
     }
+
+    this.watchId = null
   }
 
   componentWillMount() {
@@ -35,11 +37,16 @@ export default class Map extends Component {
     this.handleUserAdded()
   }
 
+  componentWillUnmount() {
+    // Cuando se desmonta el componente, se limpia el listener de geolocation
+    navigator.geolocation.clearWatch(this.watchId);
+  }
+
   /*
     Funcion que obtiene los usuarios
   */
   handleUserAdded() {
-    let {users} = this.state, {ownMarker} = this.state
+    let {users} = this.state, {ownMarker} = this.state, products = []
     const usersRef = firebase.database().ref().child('users')
     const userSellerId = this.props.userId
 
@@ -50,8 +57,9 @@ export default class Map extends Component {
         Se agrega a la lista de usuarios
       */
       let user = snapshot.val()
-      let products = await this.getUserProducts(user)
+      products = await this.getUserProducts(user)
       user.products = products
+      console.log('new user', user)
       if (snapshot.key !== userSellerId) {
         users = users.concat(user)
         this.setState({users})
@@ -95,15 +103,17 @@ export default class Map extends Component {
     })
   }
 
+  /*
+    Funcion que obtiene en todo momento la localizacion actual y la establece al marcador propio
+  */
   handleGetCurrentPosition() {
-    const geolocation = navigator.geolocation
-    let watchId = null, {ownMarker} = this.state
+    let {ownMarker} = this.state
 
-    if (!geolocation) {
+    if (!navigator.geolocation) {
       reject(new Error('Geolocation not supported'))
     }
 
-    watchId = geolocation.watchPosition(position => {
+    this.watchId = navigator.geolocation.watchPosition(position => {
       ownMarker.lat = position.coords.latitude
       ownMarker.lng = position.coords.longitude
       this.setState({

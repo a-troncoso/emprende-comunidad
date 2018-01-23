@@ -23,6 +23,7 @@
     "nodemailer": "^4.4.1",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
+    "react-bootstrap": "^0.32.0",
     "react-dom": "^16.0.0",
     "react-icons": "^2.2.7",
     "react-mfb": "^0.6.0",

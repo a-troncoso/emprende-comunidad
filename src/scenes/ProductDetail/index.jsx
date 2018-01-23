@@ -46,23 +46,30 @@ export default class ProductDetail extends Component {
   }
 
   async getUserData() {
+    const { user } = this.state
     const userId = this.props.match.params.id
     const snapshot = await firebase.database().ref('users/' + userId).once('value')
     const snapshotVal = snapshot.val()
     console.log('user data: ', snapshotVal)
+
+    user.name = snapshotVal.name
+    user.lastName = snapshotVal.lastName
+    user.address = snapshotVal.location.address
+    this.setState( {user} )
   }
 
   async getProductData() {
+    const product = {}
     const productUid = this.props.match.params.productUid
     const snapshot = await firebase.database().ref('products/' + productUid).once('value')
     const snapshotVal = snapshot.val()
     console.log('product data: ', snapshotVal)
-    let product = {}
+
     product.pictureUrl = snapshotVal.pictureUrl
     product.name = snapshotVal.name
     product.description = snapshotVal.description
     product.pictures = snapshotVal.pictures
-    this.setState({product}, () => console.log(this.state))
+    this.setState({product})
   }
 
   render() {

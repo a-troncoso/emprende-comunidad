@@ -59,6 +59,7 @@ export default class Map extends Component {
       let user = snapshot.val()
       products = await this.getUserProducts(user)
       user.products = products
+      user.uid = snapshot.key
       console.log('new user', user)
       if (snapshot.key !== userSellerId) {
         users = users.concat(user)
@@ -143,7 +144,7 @@ export default class Map extends Component {
 
   render() {
     return (<div className={style.root}>
-      <EcUserFinderInput className={style.userFinderInput}></EcUserFinderInput>
+      <EcUserFinderInput className={style.userFinderInput} profile={this.props.profile}></EcUserFinderInput>
 
       <Menu effect="zoomin" method="hover" position="bl">
         <MainButton iconResting="ion-ios-eye" iconActive="ion-ios-eye-outline"/>
@@ -163,7 +164,7 @@ export default class Map extends Component {
                 <EcMarker
                   lat={this.state.ownMarker.lat}
                   lng={this.state.ownMarker.lng}
-                  onGoToProductDetail={productUid => this.props.onGoToProductDetail(productUid)}
+                  onGoToProductDetail={productUid => this.props.onGoToProductDetail(productUid, this.state.ownMarker.user.uid)}
                   user={this.state.ownMarker.user}
                   type="own"></EcMarker>
               ) : (
@@ -177,7 +178,7 @@ export default class Map extends Component {
                     key={key}
                     lat={user.location.lat}
                     lng={user.location.lng}
-                    onGoToProductDetail={this.props.onGoToProductDetail}
+                    onGoToProductDetail={productUid => this.props.onGoToProductDetail(productUid, user.uid)}
                     user={user}
                     ></EcMarker>
                 )

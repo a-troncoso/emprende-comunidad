@@ -1,9 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {Image} from 'semantic-ui-react'
-import {createHashHistory} from 'history'
-import {Link} from 'react-router-dom'
-export const history = createHashHistory()
 
 import style from './ProductMarkers.scss'
 

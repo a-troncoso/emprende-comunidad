@@ -42,8 +42,8 @@ export default class SellerVisitorMap extends Component {
       {
         this.state.showImportantMessage && <EcImportantMessage onAccept={this.handleRegister} onCancel={this.handleCancel}></EcImportantMessage>
       }
-      <EcMap profile='seller-visitor' userId={userSellerId}  onGoToProductDetail={productUid => {
-          this.props.history.push(`/seller-visitor/${userSellerId}/product-view/${productUid}`)
+      <EcMap profile='seller-visitor' userId={userSellerId} onGoToProductDetail={(productUid, userUid) => {
+          this.props.history.push(`/seller-visitor/${userUid}/product-view/${productUid}`)
         }} onGoToUsersList={() => {
           this.props.history.push('/seller-visitor/users-list')
         }} onGoToMap={() => {

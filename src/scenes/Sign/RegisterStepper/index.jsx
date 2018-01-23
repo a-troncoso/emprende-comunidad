@@ -4,7 +4,7 @@ import Stepper from 'react-stepper-horizontal'
 import EcAddProducts from './components/AddProducts'
 import EcEnterEmail from './components/EnterEmail'
 import EcConfirm from './components/Confirm'
-import {Container, Button} from 'semantic-ui-react'
+import {Container, Button, Dimmer, Loader} from 'semantic-ui-react'
 import style from './RegisterStepper.scss'
 
 export default class RegisterStepper extends Component {
@@ -33,7 +33,13 @@ export default class RegisterStepper extends Component {
           title: '¡Listo!'
         }
       ],
-      currentStep: 0
+      currentStep: 0,
+      validationModalOpen: false,
+      errorField: null,
+      loader: {
+        active: false,
+        stepText: 'Subiendo imágenes'
+      }
     }
 
     this.onClickNext = this.onClickNext.bind(this)
@@ -43,7 +49,14 @@ export default class RegisterStepper extends Component {
   componentWillMount() { }
 
   onClickNext() {
-    const {currentStep} = this.state
+    const {currentStep, validationModalOpen} = this.state
+    // this.setState({validationModalOpen: true})
+    const validationResult = this.validateStep(currentStep)
+    if (!validationResult.valid) {
+      this.setState({ errorField: validationResult.field })
+      return
+    }
+
     if (currentStep === 1) {
       this.saveSellerVisitorUser()
     } else {
@@ -51,32 +64,33 @@ export default class RegisterStepper extends Component {
     }
   }
 
-  checkCurrentStep() {
-    if (this.state.currentStep === 2) {
-      this.saveSellerVisitorUser()
-    }
-  }
 
   async saveSellerVisitorUser() {
-    const productValid = this.validateProductData()
-    if (!productValid) {
-      console.log('Validaciones fallidas')
-      return
-    }
+    const { loader, user, currentStep } = this.state
+
+    // Muestra loader
+    loader.active = true
+    this.setState({loader})
+
     // Espera la subida de imagenes
     await this.uploadProductImages()
-    // Si se han subido todas las imágenes del producto
-    if (this.state.user.products[0].temporaryPictures.length < this.state.user.products[0].pictures.length) { return }
+
+    loader.stepText = 'Guardando producto'
+    this.setState({loader})
 
     const saveProductsResponse = await this.saveProducts()
 
-    const {user,currentStep} = this.state
+    loader.stepText = 'Guardando usuario'
+    this.setState({loader})
 
     // Agregar usuario seller a firebase
     const usersRef = firebase.database().ref().child('users')
     const userID = usersRef.push()
     await userID.set(this.formatUserData(user, saveProductsResponse.key))
-    this.setState({ currentStep: currentStep + 1 })
+
+    // Esconde loader
+    loader.active = false
+    this.setState({ currentStep: currentStep + 1, loader })
   }
 
   async uploadProductImages() {
@@ -153,30 +167,62 @@ export default class RegisterStepper extends Component {
     this.setState({ user })
   }
 
-  validateProductData() {
-    return this.state.user.email !== '' &&
-      this.state.user.products[0].description !== ''  &&
-      this.state.user.products[0].temporaryPictures.length >= 3
+  validateStep(stepNumber) {
+    if (stepNumber === 0) {
+      if (!this.state.user.products[0].name || this.state.user.products[0].name.length <= 2) {
+        return {
+          valid: false,
+          field: 'name'
+        }
+      } else if (!this.state.user.products[0].description || this.state.user.products[0].description.length <= 9) {
+        return {
+          valid: false,
+          field: 'description'
+        }
+      }
+    } else if (stepNumber === 1) {
+      if (!this.state.user.email || !this.validateEmail(this.state.user.email)) {
+        return {
+          valid: false,
+          field: 'email'
+        }
+      }
+    }
+
+    return {
+      valid: true,
+      field: null
+    }
+  }
+
+  validateEmail(email) {
+    var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return regex.test(email.toLowerCase())
   }
 
   render() {
     const {steps, currentStep} = this.state
 
-    return (<Container>
-      <div className={style.stepper}>
-        <Stepper
-          activeColor="#8ad322"
-          completeColor="#8ad322"
-          defaultColor="#b8e873"
-          completeBarColor="#525252"
-          completeTitleColor="#525252"
-          activeTitleColor="#525252"
-          steps={steps} activeStep={currentStep}></Stepper>
-      </div>
-      {this.state.currentStep === 0 && <EcAddProducts productsData={this.state.user.products} onUpdateProductsData={this.handleUpdateRegisterData}/>}
-      {this.state.currentStep === 1 && <EcEnterEmail email={this.state.user.email} onUpdateEmail={this.handleUpdateRegisterData}/>}
-      {this.state.currentStep === 2 && <EcConfirm/>}
-      {this.state.currentStep < 2 && <Button onClick={this.onClickNext} className={`primary ${style.nextBtn}`} fluid>Siguiente</Button>}
-    </Container>)
+    return (<div>
+      <Container>
+        <Dimmer active={this.state.loader.active}>
+          <Loader content={this.state.loader.stepText} />
+        </Dimmer>
+        <div className={style.stepper}>
+          <Stepper
+            activeColor="#8ad322"
+            completeColor="#8ad322"
+            defaultColor="#b8e873"
+            completeBarColor="#525252"
+            completeTitleColor="#525252"
+            activeTitleColor="#525252"
+            steps={steps} activeStep={currentStep}></Stepper>
+        </div>
+        {this.state.currentStep === 0 && <EcAddProducts errorField={this.state.errorField} productsData={this.state.user.products} onUpdateProductsData={this.handleUpdateRegisterData}/>}
+        {this.state.currentStep === 1 && <EcEnterEmail errorField={this.state.errorField} email={this.state.user.email} onUpdateEmail={this.handleUpdateRegisterData}/>}
+        {this.state.currentStep === 2 && <EcConfirm/>}
+        {this.state.currentStep < 2 && <Button onClick={this.onClickNext} className={`primary ${style.nextBtn}`} fluid>Siguiente</Button>}
+      </Container>
+    </div>)
   }
 }

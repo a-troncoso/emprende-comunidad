@@ -1,4 +1,5 @@
-import React, {PropTypes, Component} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {Input} from 'semantic-ui-react'
 
 import style from './UserFinderInput.scss'
@@ -9,12 +10,16 @@ export default class UserFinderInput extends Component {
   }
 
   render() {
+    const rootClasses = !this.props.profile ? [style.root, style.seller] : [style.root]
+
     return (
-      <div className={style.root}>
+      <div className={rootClasses.join(' ')}>
         <Input type="text" icon='search' fluid placeholder="Busca usuarios o lugares aquí"></Input>
       </div>
     )
   }
 }
 
-UserFinderInput.propTypes = {}
+UserFinderInput.propTypes = {
+  profile: PropTypes.string
+}

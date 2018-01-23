@@ -132,36 +132,37 @@ export default class Register extends Component {
       { key: '6', value: '6', text: '6' },
     ]
 
-    return (<div className={style.root}>
-      <Image className={style.logo} alt="community_logo" src={logo} size='tiny' />
+    return (
+      <Container className={style.root}>
+        <Image className={style.logo} alt="community_logo" src={logo} size='tiny' />
 
-      <div className={style.registerOptions}>
-        <Button className="facebook" fluid>Registro con Facebook</Button>
-        <Divider horizontal>o</Divider>
-        <Form className={style.form}>
-          <Form.Group widths='equal'>
-            <Form.Input label='Nombre' type="text" name="name" value={this.state.seller.name} onChange={this.handleInputChange} placeholder=''/>
-            <Form.Input label='Apellidos' type="text" name="lastName" value={this.state.seller.lastName} onChange={this.handleInputChange} placeholder=''/>
-          </Form.Group>
-          <Form.Input type="email" label='Correo electrónico' name="email" value={this.state.seller.email} onChange={this.handleInputChange} placeholder=''></Form.Input>
-          <Form.Group className={style.formGroupPassword}>
-            <Form.Input label='Contraseña' className={style.inputPassword} type={this.state.password.type} name="password" value={this.state.seller.password} onChange={this.handleInputChange} placeholder=''></Form.Input>
-            <Form.Checkbox type="checkbox" className={style.checkShowPass} label='Mostrar' name="showPassword" checked={this.state.password.show} onChange={this.handleToggleCheckbox}></Form.Checkbox>
-          </Form.Group>
-          <Form.Checkbox className={style.valueProductCheck} value={this.state.seller.valueProduct} onChange={this.handleChangeValueProduct} defaultChecked toggle label="Quiero que mis productos sean valorados" />
-          <div className={`field ${style.phoneGroup}`}>
-            <label>Teléfono</label>
-            <Form.Group className={` ${style.phoneFields}`}>
-              <Select placeholder='Código...' className={style.coutrySelector} options={countryOptions} value="cl"/>
-              <Select placeholder='Código...' className={style.areaSelector} options={areaOptions} value="9"/>
-              <Input type="number" name="phoneNumber" value={this.state.seller.phoneNumber} onChange={this.handleInputChange} placeholder='Teléfono'/>
+        <div className={style.registerOptions}>
+          {/*<Button className="facebook" fluid>Registro con Facebook</Button>
+          <Divider horizontal>o</Divider>*/}
+          <Form className={style.form}>
+            <Form.Group widths='equal'>
+              <Form.Input label='Nombre' type="text" name="name" value={this.state.seller.name} onChange={this.handleInputChange} placeholder=''/>
+              <Form.Input label='Apellidos' type="text" name="lastName" value={this.state.seller.lastName} onChange={this.handleInputChange} placeholder=''/>
             </Form.Group>
-          </div>
-          <Button type='submit' className="primary" onClick={this.handleSubmitSeller} disabled={this.state.enterButton.disabled} fluid>Regístrate</Button>
-        </Form>
-      </div>
+            <Form.Input type="email" label='Correo electrónico' name="email" value={this.state.seller.email} onChange={this.handleInputChange} placeholder=''></Form.Input>
+            <Form.Group className={style.formGroupPassword}>
+              <Form.Input label='Contraseña' className={style.inputPassword} type={this.state.password.type} name="password" value={this.state.seller.password} onChange={this.handleInputChange} placeholder=''></Form.Input>
+              <Form.Checkbox type="checkbox" className={style.checkShowPass} label='Mostrar' name="showPassword" checked={this.state.password.show} onChange={this.handleToggleCheckbox}></Form.Checkbox>
+            </Form.Group>
+            <Form.Checkbox className={style.valueProductCheck} value={this.state.seller.valueProduct} onChange={this.handleChangeValueProduct} defaultChecked toggle label="Quiero que mis productos sean valorados" />
+            <div className={`field ${style.phoneGroup}`}>
+              <label>Teléfono</label>
+              <Form.Group className={` ${style.phoneFields}`}>
+                <Select placeholder='Código...' className={style.coutrySelector} options={countryOptions} value="cl"/>
+                <Select placeholder='Código...' className={style.areaSelector} options={areaOptions} value="9"/>
+                <Input type="number" name="phoneNumber" value={this.state.seller.phoneNumber} onChange={this.handleInputChange} placeholder='Teléfono'/>
+              </Form.Group>
+            </div>
+            <Button type='submit' className="primary" onClick={this.handleSubmitSeller} disabled={this.state.enterButton.disabled} fluid>Regístrate</Button>
+          </Form>
+        </div>
 
-    </div>);
+      </Container>);
   }
 }
 

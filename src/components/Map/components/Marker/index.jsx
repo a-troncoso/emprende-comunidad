@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {PropTypes} from 'prop-types'
-import classNames from 'classnames'
 import {Image} from 'semantic-ui-react'
 import EcProductMarkers from '../ProductMarkers'
 import defaultAvatarPic from '@/assets/images/default-avatar.png'
@@ -61,12 +60,14 @@ export default class Marker extends Component {
         this.node = node
       }}>
         <div className={style.markerPulse}></div>
-        {this.state.showProductMarkers && this.props.user.products.length > 0 && (
-          <EcProductMarkers
-            onGoToProductDetail={productUid => this.props.onGoToProductDetail(productUid)}
-            products={this.props.user.products}
-            user={this.props.user}></EcProductMarkers>
-        )}
+        {
+          this.state.showProductMarkers && this.props.user.products.length > 0 && (
+            <EcProductMarkers
+              onGoToProductDetail={productUid => this.props.onGoToProductDetail(productUid)}
+              products={this.props.user.products}
+              user={this.props.user}></EcProductMarkers>
+          )
+        }
         <div className={markerClasses.join(' ')} onClick={this.onClickMarker}>
           <img src={srcUserImage} className={style.markerImage}></img>
         </div>

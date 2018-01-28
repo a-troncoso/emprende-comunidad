@@ -16,41 +16,50 @@ export default class SellerVisitor extends Component {
     }
 
     this.params = new URLSearchParams(props.location.search)
+    this.sellerVisitorUid = this.params.get('key')
+    this.sellerVisitorData = null
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.validateSellerVisitorUser()
-  }
 
-  async componentWillUnmount() {
-    const sellerVisitorUid = this.params.get('key')
-    const userRef = firebase.database().ref(`users/${sellerVisitorUid}`)
-    const snapshot = await userRef.once('value')
+    // Antes de cerrar la ventana, actualiza el perfil y su estado activo según validaciones
+    window.addEventListener('beforeunload', async (ev) => {
+      ev.preventDefault();
+      // return ev.returnValue = 'Are you sure you want to close?'
+      const userRef = firebase.database().ref(`users/${this.sellerVisitorUid}`)
 
-    if (sellerVisitorData.profile === 2 && sellerVisitorData.active) {
-      userRef.update({
-        active: false
-      })
-    }
+      if (userRef.key !== 'null' && this.sellerVisitorData && this.sellerVisitorData.profile === 2 && this.sellerVisitorData.active) {
+        userRef.update({
+          profile: 4,
+          active: false
+        })
+      }
+    })
   }
 
   async validateSellerVisitorUser() {
-    const sellerVisitorUid = this.params.get('key')
-    const userRef = firebase.database().ref(`users/${sellerVisitorUid}`)
-    const snapshot = await userRef.once('value')
-    const sellerVisitorData = snapshot.val()
+    const userRef = firebase.database().ref(`users/${this.sellerVisitorUid}`)
+    let snapshot = await userRef.once('value')
+    this.sellerVisitorData = snapshot.val()
     /*
       Si se dió por query string la key del seller-visitor
       existe en la BD
+      hay datos para el uid del seller-visitor
       tiene perfil 2 (seller-visitor)
-      y no está activo
-      => Se actualiza la localizacion del usuario
+      no está activo
+      y el contador de accesos = 0
+      => Se activa el usuario
     */
-    if (sellerVisitorUid && userRef.key !== 'null' && sellerVisitorData.profile === 2 && !sellerVisitorData.active) {
+    if (this.sellerVisitorUid && userRef.key !== 'null' && this.sellerVisitorData && this.sellerVisitorData.profile === 2
+        && !this.sellerVisitorData.active && this.sellerVisitorData.accessCounter === 0) {
       userRef.update({
-        active: true
+        active: true,
+        accessCounter: ++this.sellerVisitorData.accessCounter
       })
       this.setState({ sellerVisitorValid: true })
+      snapshot = await userRef.once('value')
+      this.sellerVisitorData = snapshot.val()
     }
   }
 

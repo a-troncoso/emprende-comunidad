@@ -16,6 +16,7 @@ export default class RegisterStepper extends Component {
         active: false,
         email: '',
         profile: 2,
+        accessCounter: 0,
         products: [{
           name: '',
           description: '',

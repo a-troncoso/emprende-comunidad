@@ -1,10 +1,6 @@
 import React, {Component} from 'react'
-import {
-  Image,
-  Container,
-  Item,
-  Header
-} from 'semantic-ui-react'
+import {PropTypes} from 'prop-types'
+import { Image, Container} from 'semantic-ui-react'
 import EcProductDetailHeader from './components/ProductDetailHeader'
 import EcProductComments from './components/ProductComments'
 import Slider from 'react-slick'
@@ -40,15 +36,15 @@ export default class ProductDetail extends Component {
     }
   }
 
-  async componentWillMount() {
-    this.getUserData()
+  async componentDidMount() {
+    console.log('props:', this.props)
     this.getProductData()
   }
 
-  async getUserData() {
+  async getUserData(userUid) {
     const { user } = this.state
     const userId = this.props.match.params.id
-    const snapshot = await firebase.database().ref('users/' + userId).once('value')
+    const snapshot = await firebase.database().ref(`users/${userUid}`).once('value')
     const snapshotVal = snapshot.val()
     console.log('user data: ', snapshotVal)
 
@@ -60,10 +56,12 @@ export default class ProductDetail extends Component {
 
   async getProductData() {
     const product = {}
-    const productUid = this.props.match.params.productUid
+    const productUid = this.props.location.state.productUid
     const snapshot = await firebase.database().ref('products/' + productUid).once('value')
     const snapshotVal = snapshot.val()
     console.log('product data: ', snapshotVal)
+
+    this.getUserData(snapshotVal.user)
 
     product.pictureUrl = snapshotVal.pictureUrl
     product.name = snapshotVal.name
@@ -110,4 +108,6 @@ export default class ProductDetail extends Component {
   }
 }
 
-ProductDetail.propTypes = {}
+ProductDetail.propTypes = {
+  productId: PropTypes.string
+}

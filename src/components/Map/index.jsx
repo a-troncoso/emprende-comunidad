@@ -133,13 +133,15 @@ export default class Map extends Component {
 
   updateUserPosition(lat, lng) {
     const userSellerId = this.props.userId
-
-    firebase.database().ref(`users/${userSellerId}`).update({
-      location: {
-        lat,
-        lng
-      }
-    })
+    // Sólo si se ha dado un userId por params, actualiza la posicion en BD
+    if (userSellerId) {
+      firebase.database().ref(`users/${userSellerId}`).update({
+        location: {
+          lat,
+          lng
+        }
+      })
+    }
   }
 
   render() {
@@ -164,7 +166,7 @@ export default class Map extends Component {
                 <EcMarker
                   lat={this.state.ownMarker.lat}
                   lng={this.state.ownMarker.lng}
-                  onGoToProductDetail={productUid => this.props.onGoToProductDetail(productUid, this.state.ownMarker.user.uid)}
+                  onGoToProductDetail={productUid => this.props.onGoToProductDetail(productUid)}
                   user={this.state.ownMarker.user}
                   type="own"></EcMarker>
               ) : (
@@ -178,7 +180,7 @@ export default class Map extends Component {
                     key={key}
                     lat={user.location.lat}
                     lng={user.location.lng}
-                    onGoToProductDetail={productUid => this.props.onGoToProductDetail(productUid, user.uid)}
+                    onGoToProductDetail={productUid => this.props.onGoToProductDetail(productUid)}
                     user={user}
                     ></EcMarker>
                 )

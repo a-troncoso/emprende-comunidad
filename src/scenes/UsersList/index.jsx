@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {Menu, MainButton, ChildButton} from 'react-mfb'
 import {
@@ -6,14 +6,8 @@ import {
   Container,
   Image,
   Segment,
-  Modal,
   Header,
-  Button,
-  Form,
-  List
-} from 'semantic-ui-react'
-import StarRatingComponent from 'react-star-rating-component'
-import {Link} from 'react-router-dom'
+  List} from 'semantic-ui-react'
 import firebase from 'firebase'
 import defaultAvatarPic from '@/assets/images/default-avatar.png'
 
@@ -30,7 +24,7 @@ export default class UsersList extends Component {
     this.handleGoToRoute = this.handleGoToRoute.bind(this)
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.handleUserAdded()
   }
 
@@ -102,7 +96,7 @@ export default class UsersList extends Component {
                   user.showProducts && <List divided verticalAlign='middle'>
                       {
                         user.products.map((product, key) => {
-                          return (<List.Item onClick={this.props.onGoToProductDetail} key={key}>
+                          return (<List.Item onClick={() => this.props.onGoToProductDetail(product.uid)} key={key}>
                             <Image avatar src={product.pictureUrl}/>
                             <List.Content>
                               <List.Header>{product.name}</List.Header>

@@ -64,7 +64,6 @@ export default class RegisterStepper extends Component {
     }
   }
 
-
   async saveSellerVisitorUser() {
     const { loader, user, currentStep } = this.state
 
@@ -87,6 +86,7 @@ export default class RegisterStepper extends Component {
     const usersRef = firebase.database().ref().child('users')
     const userID = usersRef.push()
     await userID.set(this.formatUserData(user, saveProductsResponse.key))
+    this.setUserToProduct(saveProductsResponse.key, userID.key)
 
     // Esconde loader
     loader.active = false
@@ -125,15 +125,6 @@ export default class RegisterStepper extends Component {
     return productID
   }
 
-  formatProductData(data) {
-    return {
-      name: data.name,
-      description: data.description,
-      pictures: data.pictures,
-      pictureUrl: data.pictureUrl
-    }
-  }
-
   formatUserData(userData, productKey) {
     let formattedData = {
       active: userData.active,
@@ -143,6 +134,21 @@ export default class RegisterStepper extends Component {
     }
     formattedData.products[productKey] =  true
     return formattedData
+  }
+
+  setUserToProduct(productKey, userKey) {
+    firebase.database().ref(`products/${productKey}`).update({
+      user: userKey
+    })
+  }
+
+  formatProductData(data) {
+    return {
+      name: data.name,
+      description: data.description,
+      pictures: data.pictures,
+      pictureUrl: data.pictureUrl
+    }
   }
 
   handleUpdateRegisterData(event) {
@@ -169,12 +175,12 @@ export default class RegisterStepper extends Component {
 
   validateStep(stepNumber) {
     if (stepNumber === 0) {
-      if (!this.state.user.products[0].name || this.state.user.products[0].name.length <= 2) {
+      if (!this.state.user.products[0].name || this.state.user.products[0].name.length < 4) {
         return {
           valid: false,
           field: 'name'
         }
-      } else if (!this.state.user.products[0].description || this.state.user.products[0].description.length <= 9) {
+      } else if (!this.state.user.products[0].description || this.state.user.products[0].description.length < 15) {
         return {
           valid: false,
           field: 'description'

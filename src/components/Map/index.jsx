@@ -32,7 +32,7 @@ export default class Map extends Component {
     this.watchId = null
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.handleGetCenterMapPosition()
     this.handleUserAdded()
   }
@@ -46,33 +46,38 @@ export default class Map extends Component {
     Funcion que obtiene los usuarios
   */
   handleUserAdded() {
-    let {users} = this.state, {ownMarker} = this.state, products = []
+    let { users } = this.state, { ownMarker } = this.state, products = []
     const usersRef = firebase.database().ref().child('users')
     const userSellerId = this.props.userId
 
     usersRef.on('child_added', async (snapshot) => {
-      /*
-        Si el id usuario que se está consultando de la lista de usuarios
-        es distinto del id usuario vendedor-visitante
-        Se agrega a la lista de usuarios
-      */
+      /**
+       * Si el usuario no está activo, no hace nada
+       */
       let user = snapshot.val()
+      if (!user.active) return
+
       products = await this.getUserProducts(user)
       user.products = products
       user.uid = snapshot.key
       console.log('new user', user)
+      /**
+        * Si el id usuario que se está consultando de la lista de usuarios
+        * es distinto del id usuario vendedor-visitante
+        * Se agrega a la lista de usuarios
+      */
       if (snapshot.key !== userSellerId) {
         users = users.concat(user)
-        this.setState({users})
+        this.setState({ users })
       } else {
         ownMarker.user = user
-        this.setState({ownMarker})
+        this.setState({ ownMarker })
       }
     })
   }
 
-  /*
-    Funcion que obtiene los productos de un usuario
+  /**
+    * Funcion que obtiene los productos de un usuario
   */
   async getUserProducts(user) {
     let productKeys = user.products, products = [], snapshot = {}, snapshotVal = {}

@@ -47,7 +47,7 @@ export default class RegisterStepper extends Component {
     this.handleUpdateRegisterData = this.handleUpdateRegisterData.bind(this)
   }
 
-  componentWillMount() { }
+  componentDidMount() { }
 
   onClickNext() {
     const {currentStep, validationModalOpen} = this.state
@@ -131,6 +131,7 @@ export default class RegisterStepper extends Component {
       active: userData.active,
       email: userData.email,
       profile: userData.profile,
+      accessCounter: userData.accessCounter,
       products: {}
     }
     formattedData.products[productKey] =  true
